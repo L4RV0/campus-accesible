@@ -32,6 +32,18 @@ class RutasApiIntegracionTest {
     }
 
     @Test
+    @DisplayName("HU-01: la página del mapa se sirve en la raíz con su formulario etiquetado")
+    void paginaDelMapa() throws Exception {
+        mvc.perform(get("/index.html"))
+                .andExpect(status().isOk())
+                .andExpect(org.springframework.test.web.servlet.result.MockMvcResultMatchers.content()
+                        .string(org.hamcrest.Matchers.allOf(
+                                org.hamcrest.Matchers.containsString("<label for=\"origen\">"),
+                                org.hamcrest.Matchers.containsString("<label for=\"destino\">"),
+                                org.hamcrest.Matchers.containsString("<strong>ficticios</strong>"))));
+    }
+
+    @Test
     @DisplayName("HU-03: de la Entrada al Bloque B sin escaleras no pasa por ninguna escalera")
     void recorridoSinEscaleras() throws Exception {
         mvc.perform(get("/api/recorridos")
