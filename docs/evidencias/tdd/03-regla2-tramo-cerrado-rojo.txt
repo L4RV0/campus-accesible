@@ -1,0 +1,11 @@
+﻿
+[INFO] Building campus-accesible 0.1.0
+[ERROR] Tests run: 8, Failures: 1, Errors: 0, Skipped: 0, Time elapsed: 0.295 s <<< FAILURE! -- in 
+ec.campus.accesible.aplicacion.PlanificadorRutasTest
+[ERROR] ec.campus.accesible.aplicacion.PlanificadorRutasTest.tramoCerradoNoSeRecomienda -- Time elapsed: 0.032 s <<< 
+FAILURE!
+[ERROR]   PlanificadorRutasTest.tramoCerradoNoSeRecomienda:111 
+[ERROR] Tests run: 8, Failures: 1, Errors: 0, Skipped: 0
+[INFO] BUILD FAILURE
+
+

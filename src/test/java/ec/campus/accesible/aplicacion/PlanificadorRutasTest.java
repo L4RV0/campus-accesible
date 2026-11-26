@@ -92,6 +92,42 @@ class PlanificadorRutasTest {
         assertThat(recorrido.tramos()).extracting(Tramo::id).containsExactly("AB");
     }
 
+    /*
+     *   A ──(rampa 50, CERRADA)── B
+     *   └─(plano 70)─ C ─(plano 70)─┘
+     */
+    @Test
+    @DisplayName("Regla 2 · HU-04: un tramo cerrado no se recomienda")
+    void tramoCerradoNoSeRecomienda() {
+        MapaDePrueba mapa = new MapaDePrueba()
+                .lugares("A", "B", "C")
+                .tramo("AB", "A", "B", RAMPA, 50)
+                .tramo("AC", "A", "C", PLANO, 70)
+                .tramo("CB", "C", "B", PLANO, 70);
+        mapa.tramo("AB").orElseThrow().cerrar();
+
+        Recorrido recorrido = new PlanificadorRutas(mapa).planificar("A", "B", Preferencias.ninguna());
+
+        assertThat(recorrido.tramos()).extracting(Tramo::id).containsExactly("AC", "CB");
+    }
+
+    @Test
+    @DisplayName("Regla 2 · HU-04: al reabrir el tramo vuelve a recomendarse")
+    void tramoReabiertoVuelveAUsarse() {
+        MapaDePrueba mapa = new MapaDePrueba()
+                .lugares("A", "B", "C")
+                .tramo("AB", "A", "B", RAMPA, 50)
+                .tramo("AC", "A", "C", PLANO, 70)
+                .tramo("CB", "C", "B", PLANO, 70);
+        Tramo rampa = mapa.tramo("AB").orElseThrow();
+        rampa.cerrar();
+        rampa.abrir();
+
+        Recorrido recorrido = new PlanificadorRutas(mapa).planificar("A", "B", Preferencias.ninguna());
+
+        assertThat(recorrido.tramos()).extracting(Tramo::id).containsExactly("AB");
+    }
+
     @Test
     @DisplayName("HU-02: un lugar inexistente se rechaza con un mensaje claro")
     void lugarInexistente() {
