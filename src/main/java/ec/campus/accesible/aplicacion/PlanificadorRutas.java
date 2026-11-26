@@ -49,6 +49,9 @@ public class PlanificadorRutas implements IPlanificadorRutas {
                 if (preferencias.sinEscaleras() && tramo.tipo() == TipoTramo.ESCALERA) {
                     continue;
                 }
+                if (tramo.cerrado()) {
+                    continue;
+                }
                 String vecino = tramo.otroExtremo(actual);
                 int nuevaDistancia = distancia.get(actual) + tramo.metros();
                 if (nuevaDistancia < distancia.getOrDefault(vecino, Integer.MAX_VALUE)) {

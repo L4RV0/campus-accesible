@@ -1,0 +1,8 @@
+﻿
+[INFO] Building campus-accesible 0.1.0
+[INFO] Tests run: 8, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.316 s -- in 
+ec.campus.accesible.aplicacion.PlanificadorRutasTest
+[INFO] Tests run: 8, Failures: 0, Errors: 0, Skipped: 0
+[INFO] BUILD SUCCESS
+
+
