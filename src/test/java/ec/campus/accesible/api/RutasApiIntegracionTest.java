@@ -46,14 +46,15 @@ class RutasApiIntegracionTest {
     @Test
     @DisplayName("HU-03: de la Entrada a Laboratorios sin escaleras")
     void entradaALaboratoriosSinEscaleras() throws Exception {
-        // FALLO CONTROLADO para la práctica DevOps: se asume que la ruta pasa por la Cafetería (340 m),
-        // pero hay una más corta por el Bloque B. El CI debe quedar en rojo.
+        // Por la Cafetería serían 340 m (120+70+50+100); por el Bloque B son 320 m (120+90+110).
+        // Ambos caminos evitan escaleras, así que se elige el más corto.
         mvc.perform(get("/api/recorridos")
                         .param("origen", "ENT").param("destino", "LAB").param("sinEscaleras", "true"))
                 .andExpect(status().isOk())
+                .andExpect(jsonPath("$.tramos[*].tipo", everyItem(not("ESCALERA"))))
                 .andExpect(jsonPath("$.lugares[*].id")
-                        .value(org.hamcrest.Matchers.contains("ENT", "BIB", "BLA", "CAF", "LAB")))
-                .andExpect(jsonPath("$.metrosTotales").value(340));
+                        .value(org.hamcrest.Matchers.contains("ENT", "BIB", "BLB", "LAB")))
+                .andExpect(jsonPath("$.metrosTotales").value(320));
     }
 
     @Test
