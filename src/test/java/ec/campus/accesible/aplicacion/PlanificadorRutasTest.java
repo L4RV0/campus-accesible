@@ -2,6 +2,8 @@ package ec.campus.accesible.aplicacion;
 
 import ec.campus.accesible.dominio.Lugar;
 import ec.campus.accesible.dominio.LugarNoEncontradoException;
+import ec.campus.accesible.dominio.MotivoSinRecorrido;
+import ec.campus.accesible.dominio.SinRecorridoCompatibleException;
 import ec.campus.accesible.dominio.Preferencias;
 import ec.campus.accesible.dominio.Recorrido;
 import ec.campus.accesible.dominio.Tramo;
@@ -126,6 +128,49 @@ class PlanificadorRutasTest {
         Recorrido recorrido = new PlanificadorRutas(mapa).planificar("A", "B", Preferencias.ninguna());
 
         assertThat(recorrido.tramos()).extracting(Tramo::id).containsExactly("AB");
+    }
+
+    @Test
+    @DisplayName("Regla 3 · HU-05: si solo se llega por escalera, se informa que no hay ruta sin escaleras")
+    void sinRutaPorEscaleras() {
+        MapaDePrueba mapa = new MapaDePrueba()
+                .lugares("Biblioteca", "Auditorio")
+                .tramo("BA", "Biblioteca", "Auditorio", ESCALERA, 30);
+
+        assertThatThrownBy(() -> new PlanificadorRutas(mapa)
+                .planificar("Biblioteca", "Auditorio", Preferencias.evitarEscaleras()))
+                .isInstanceOf(SinRecorridoCompatibleException.class)
+                .hasMessage("No hay un recorrido sin escaleras disponible entre Biblioteca y Auditorio")
+                .satisfies(e -> assertThat(((SinRecorridoCompatibleException) e).motivos())
+                        .containsExactly(MotivoSinRecorrido.ESCALERAS));
+    }
+
+    @Test
+    @DisplayName("Regla 3 · HU-05: si el único tramo está cerrado, se informa el motivo")
+    void sinRutaPorTramoCerrado() {
+        MapaDePrueba mapa = new MapaDePrueba()
+                .lugares("Biblioteca", "Auditorio")
+                .tramo("BA", "Biblioteca", "Auditorio", RAMPA, 30);
+        mapa.tramo("BA").orElseThrow().cerrar();
+
+        assertThatThrownBy(() -> new PlanificadorRutas(mapa)
+                .planificar("Biblioteca", "Auditorio", Preferencias.ninguna()))
+                .isInstanceOf(SinRecorridoCompatibleException.class)
+                .hasMessage("No hay un recorrido disponible entre Biblioteca y Auditorio: hay tramos cerrados")
+                .satisfies(e -> assertThat(((SinRecorridoCompatibleException) e).motivos())
+                        .containsExactly(MotivoSinRecorrido.TRAMOS_CERRADOS));
+    }
+
+    @Test
+    @DisplayName("Regla 3 · HU-05: lugares sin ninguna conexión")
+    void lugaresSinConexion() {
+        MapaDePrueba mapa = new MapaDePrueba().lugares("A", "B");
+
+        assertThatThrownBy(() -> new PlanificadorRutas(mapa).planificar("A", "B", Preferencias.ninguna()))
+                .isInstanceOf(SinRecorridoCompatibleException.class)
+                .hasMessage("No hay un recorrido disponible entre A y B: los lugares no están conectados")
+                .satisfies(e -> assertThat(((SinRecorridoCompatibleException) e).motivos())
+                        .containsExactly(MotivoSinRecorrido.SIN_CONEXION));
     }
 
     @Test

@@ -1,0 +1,15 @@
+﻿
+[INFO] Building campus-accesible 0.1.0
+[ERROR] Tests run: 11, Failures: 3, Errors: 0, Skipped: 0, Time elapsed: 0.314 s <<< FAILURE! -- in 
+ec.campus.accesible.aplicacion.PlanificadorRutasTest
+[ERROR] ec.campus.accesible.aplicacion.PlanificadorRutasTest.lugaresSinConexion -- Time elapsed: 0.029 s <<< FAILURE!
+[ERROR] ec.campus.accesible.aplicacion.PlanificadorRutasTest.sinRutaPorTramoCerrado -- Time elapsed: 0.002 s <<< 
+FAILURE!
+[ERROR] ec.campus.accesible.aplicacion.PlanificadorRutasTest.sinRutaPorEscaleras -- Time elapsed: 0.004 s <<< FAILURE!
+[ERROR]   PlanificadorRutasTest.lugaresSinConexion:170 
+[ERROR]   PlanificadorRutasTest.sinRutaPorEscaleras:142 
+[ERROR]   PlanificadorRutasTest.sinRutaPorTramoCerrado:158 
+[ERROR] Tests run: 11, Failures: 3, Errors: 0, Skipped: 0
+[INFO] BUILD FAILURE
+
+
