@@ -2,6 +2,7 @@ package ec.campus.accesible.aplicacion;
 
 import ec.campus.accesible.dominio.EstadoIncidencia;
 import ec.campus.accesible.dominio.Incidencia;
+import ec.campus.accesible.dominio.TramoNoEncontradoException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -13,6 +14,7 @@ import java.time.ZoneId;
 
 import static ec.campus.accesible.dominio.TipoTramo.RAMPA;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class GestorIncidenciasTest {
 
@@ -51,5 +53,23 @@ class GestorIncidenciasTest {
         Incidencia segunda = gestor.reportar("T05", "Charco grande al pie de la rampa");
 
         assertThat(primera.id()).isNotEqualTo(segunda.id());
+    }
+
+    @Test
+    @DisplayName("HU-06: un reporte sin descripción se rechaza indicando el dato que falta")
+    void sinDescripcion() {
+        assertThatThrownBy(() -> gestor.reportar("T05", "   "))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("Falta la descripción de la barrera");
+        assertThat(incidencias.todas()).isEmpty();
+    }
+
+    @Test
+    @DisplayName("HU-06: un reporte sobre un tramo inexistente se rechaza")
+    void tramoInexistente() {
+        assertThatThrownBy(() -> gestor.reportar("T99", "Rampa bloqueada"))
+                .isInstanceOf(TramoNoEncontradoException.class)
+                .hasMessageContaining("T99");
+        assertThat(incidencias.todas()).isEmpty();
     }
 }
