@@ -56,6 +56,19 @@ class GestorIncidenciasTest {
     }
 
     @Test
+    @DisplayName("HU-06: un reporte sin validar no cierra el tramo ni cambia los recorridos")
+    void reporteNoCierraElTramo() {
+        gestor.reportar("T05", "La rampa está bloqueada");
+
+        assertThat(mapa.tramo("T05").orElseThrow().disponible()).isTrue();
+        assertThat(new PlanificadorRutas(mapa)
+                .planificar("BIB", "BLB", ec.campus.accesible.dominio.Preferencias.evitarEscaleras())
+                .tramos())
+                .extracting(ec.campus.accesible.dominio.Tramo::id)
+                .containsExactly("T05");
+    }
+
+    @Test
     @DisplayName("HU-06: un reporte sin descripción se rechaza indicando el dato que falta")
     void sinDescripcion() {
         assertThatThrownBy(() -> gestor.reportar("T05", "   "))
