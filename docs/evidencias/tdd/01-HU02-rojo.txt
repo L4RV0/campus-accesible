@@ -1,0 +1,17 @@
+﻿
+[INFO] Building campus-accesible 0.1.0
+[ERROR] Tests run: 4, Failures: 1, Errors: 3, Skipped: 0, Time elapsed: 0.267 s <<< FAILURE! -- in 
+ec.campus.accesible.aplicacion.PlanificadorRutasTest
+[ERROR] ec.campus.accesible.aplicacion.PlanificadorRutasTest.losTramosSonBidireccionales -- Time elapsed: 0.067 s <<< 
+ERROR!
+[ERROR] ec.campus.accesible.aplicacion.PlanificadorRutasTest.eligeElCaminoMasCorto -- Time elapsed: 0.003 s <<< ERROR!
+[ERROR] ec.campus.accesible.aplicacion.PlanificadorRutasTest.lugarInexistente -- Time elapsed: 0.139 s <<< FAILURE!
+[ERROR] ec.campus.accesible.aplicacion.PlanificadorRutasTest.origenIgualADestino -- Time elapsed: 0.002 s <<< ERROR!
+[ERROR]   PlanificadorRutasTest.lugarInexistente:68 
+[ERROR]   PlanificadorRutasTest.eligeElCaminoMasCorto:32 � UnsupportedOperation Pendiente: HU-02
+[ERROR]   PlanificadorRutasTest.losTramosSonBidireccionales:45 � UnsupportedOperation Pendiente: HU-02
+[ERROR]   PlanificadorRutasTest.origenIgualADestino:55 � UnsupportedOperation Pendiente: HU-02
+[ERROR] Tests run: 4, Failures: 1, Errors: 3, Skipped: 0
+[INFO] BUILD FAILURE
+
+
