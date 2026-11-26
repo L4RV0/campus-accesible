@@ -1,6 +1,7 @@
 package ec.campus.accesible.aplicacion;
 
 import ec.campus.accesible.dominio.Incidencia;
+import ec.campus.accesible.dominio.TramoNoEncontradoException;
 
 import java.time.Clock;
 import java.time.LocalDateTime;
@@ -19,6 +20,12 @@ public class GestorIncidencias implements IGestorIncidencias {
 
     @Override
     public Incidencia reportar(String tramoId, String descripcion) {
+        if (descripcion == null || descripcion.isBlank()) {
+            throw new IllegalArgumentException("Falta la descripción de la barrera");
+        }
+        if (mapa.tramo(tramoId).isEmpty()) {
+            throw new TramoNoEncontradoException(tramoId);
+        }
         String id = String.format("INC-%03d", incidencias.todas().size() + 1);
         Incidencia incidencia = new Incidencia(id, tramoId, descripcion, LocalDateTime.now(reloj));
         return incidencias.guardar(incidencia);
