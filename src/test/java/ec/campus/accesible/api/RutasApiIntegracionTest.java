@@ -56,6 +56,20 @@ class RutasApiIntegracionTest {
     }
 
     @Test
+    @DisplayName("HU-03: de la Entrada a Laboratorios sin escaleras")
+    void entradaALaboratoriosSinEscaleras() throws Exception {
+        // Por la Cafetería serían 340 m (120+70+50+100); por el Bloque B son 320 m (120+90+110).
+        // Ambos caminos evitan escaleras, así que se elige el más corto.
+        mvc.perform(get("/api/recorridos")
+                        .param("origen", "ENT").param("destino", "LAB").param("sinEscaleras", "true"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.tramos[*].tipo", everyItem(not("ESCALERA"))))
+                .andExpect(jsonPath("$.lugares[*].id")
+                        .value(org.hamcrest.Matchers.contains("ENT", "BIB", "BLB", "LAB")))
+                .andExpect(jsonPath("$.metrosTotales").value(320));
+    }
+
+    @Test
     @DisplayName("HU-05: al Auditorio solo se llega por escalera, la API lo explica con 422")
     void auditorioSinEscalerasNoTieneRuta() throws Exception {
         mvc.perform(get("/api/recorridos")
