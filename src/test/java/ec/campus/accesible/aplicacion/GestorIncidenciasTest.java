@@ -2,6 +2,8 @@ package ec.campus.accesible.aplicacion;
 
 import ec.campus.accesible.dominio.EstadoIncidencia;
 import ec.campus.accesible.dominio.Incidencia;
+import ec.campus.accesible.dominio.Preferencias;
+import ec.campus.accesible.dominio.Tramo;
 import ec.campus.accesible.dominio.TramoNoEncontradoException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -62,9 +64,9 @@ class GestorIncidenciasTest {
 
         assertThat(mapa.tramo("T05").orElseThrow().disponible()).isTrue();
         assertThat(new PlanificadorRutas(mapa)
-                .planificar("BIB", "BLB", ec.campus.accesible.dominio.Preferencias.evitarEscaleras())
+                .planificar("BIB", "BLB", Preferencias.evitarEscaleras())
                 .tramos())
-                .extracting(ec.campus.accesible.dominio.Tramo::id)
+                .extracting(Tramo::id)
                 .containsExactly("T05");
     }
 

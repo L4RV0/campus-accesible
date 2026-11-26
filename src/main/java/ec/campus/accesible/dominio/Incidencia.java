@@ -13,6 +13,9 @@ public class Incidencia {
     private LocalDateTime fechaRevision;
 
     public Incidencia(String id, String tramoId, String descripcion, LocalDateTime fechaReporte) {
+        if (descripcion == null || descripcion.isBlank()) {
+            throw new IllegalArgumentException("Falta la descripción de la barrera");
+        }
         this.id = id;
         this.tramoId = tramoId;
         this.descripcion = descripcion;
