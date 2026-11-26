@@ -1,0 +1,48 @@
+name: CI
+
+# Se ejecuta en cada push a cualquier rama y en cada pull request hacia main.
+on:
+  push:
+  pull_request:
+    branches: [main]
+
+jobs:
+  pruebas:
+    name: Compilar, probar y medir cobertura
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Descargar el código
+        uses: actions/checkout@v4
+
+      - name: Instalar Java 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+          cache: maven
+
+      # verify = compila, ejecuta las pruebas (unitarias, integración y ArchUnit),
+      # genera el reporte de JaCoCo y empaqueta el .jar. Si una prueba falla, el job queda en rojo.
+      - name: Compilar y ejecutar las pruebas
+        run: ./mvnw -B verify
+
+      - name: Publicar reporte de pruebas
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: reporte-pruebas
+          path: target/surefire-reports/
+
+      - name: Publicar reporte de cobertura (JaCoCo)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: reporte-cobertura
+          path: target/site/jacoco/
+
+      - name: Guardar el .jar construido
+        uses: actions/upload-artifact@v4
+        with:
+          name: campus-accesible-jar
+          path: target/campus-accesible-*.jar
