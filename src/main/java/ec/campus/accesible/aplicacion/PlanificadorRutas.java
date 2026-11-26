@@ -4,6 +4,7 @@ import ec.campus.accesible.dominio.Lugar;
 import ec.campus.accesible.dominio.LugarNoEncontradoException;
 import ec.campus.accesible.dominio.Preferencias;
 import ec.campus.accesible.dominio.Recorrido;
+import ec.campus.accesible.dominio.TipoTramo;
 import ec.campus.accesible.dominio.Tramo;
 
 import java.util.ArrayList;
@@ -43,6 +44,9 @@ public class PlanificadorRutas implements IPlanificadorRutas {
             }
             for (Tramo tramo : mapa.tramos()) {
                 if (!tramo.conecta(actual)) {
+                    continue;
+                }
+                if (preferencias.sinEscaleras() && tramo.tipo() == TipoTramo.ESCALERA) {
                     continue;
                 }
                 String vecino = tramo.otroExtremo(actual);
