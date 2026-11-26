@@ -1,0 +1,6 @@
+[ERROR] Tests run: 2, Failures: 0, Errors: 2, Skipped: 0, Time elapsed: 0.018 s <<< FAILURE! -- in ec.campus.accesible.aplicacion.GestorIncidenciasTest
+[ERROR] ec.campus.accesible.aplicacion.GestorIncidenciasTest.reporteValido -- Time elapsed: 0.008 s <<< ERROR!
+[ERROR] ec.campus.accesible.aplicacion.GestorIncidenciasTest.identificadoresDistintos -- Time elapsed: 0.002 s <<< ERROR!
+[ERROR]   GestorIncidenciasTest.identificadoresDistintos:50 » UnsupportedOperation Pendiente: HU-06
+[ERROR]   GestorIncidenciasTest.reporteValido:38 » UnsupportedOperation Pendiente: HU-06
+[ERROR] Tests run: 23, Failures: 0, Errors: 2, Skipped: 0
