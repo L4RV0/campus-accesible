@@ -1,0 +1,156 @@
+:root {
+    --fondo: #eceff1;
+    --papel: #ffffff;
+    --tinta: #1f2a2e;
+    --suave: #56636a;
+    --linea: #cfd6da;
+    --plano: #3d5a66;
+    --rampa: #1d7a55;
+    --escalera: #b3471d;
+    --cerrado: #8a8a8a;
+    --ruta: #e0a100;
+    --error: #a3261b;
+    --foco: #0b57d0;
+}
+
+* { box-sizing: border-box; }
+
+body {
+    margin: 0;
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    background: var(--fondo);
+    color: var(--tinta);
+    line-height: 1.5;
+}
+
+.saltar {
+    position: absolute;
+    left: -9999px;
+}
+.saltar:focus {
+    left: 1rem;
+    top: 1rem;
+    background: var(--papel);
+    padding: .5rem 1rem;
+    z-index: 10;
+}
+
+:focus-visible {
+    outline: 3px solid var(--foco);
+    outline-offset: 2px;
+}
+
+.cabecera {
+    padding: 1.5rem 2rem 1rem;
+    border-bottom: 1px solid var(--linea);
+}
+.cabecera h1 { margin: 0; font-size: 1.6rem; letter-spacing: -.01em; }
+.cabecera p { margin: .25rem 0 0; color: var(--suave); }
+
+main {
+    display: grid;
+    grid-template-columns: minmax(260px, 340px) 1fr;
+    gap: 1.5rem;
+    padding: 1.5rem 2rem;
+}
+@media (max-width: 860px) {
+    main { grid-template-columns: 1fr; padding: 1rem; }
+}
+
+.panel {
+    background: var(--papel);
+    border: 1px solid var(--linea);
+    border-radius: 10px;
+    padding: 1.25rem;
+}
+.panel h2 { margin: 0 0 1rem; font-size: 1.1rem; }
+
+form { display: grid; gap: .4rem; }
+label { font-weight: 600; font-size: .95rem; }
+select, button {
+    font: inherit;
+    padding: .55rem .6rem;
+    border-radius: 6px;
+    border: 1px solid #9aa3a7;
+    background: var(--papel);
+    color: var(--tinta);
+}
+select { margin-bottom: .6rem; }
+.casilla {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+    font-weight: 500;
+    margin: .2rem 0 .8rem;
+}
+.casilla input { width: 1.15rem; height: 1.15rem; }
+button {
+    background: var(--tinta);
+    color: #fff;
+    border: none;
+    font-weight: 600;
+    cursor: pointer;
+}
+button:hover { background: #33444a; }
+button:disabled { opacity: .6; cursor: wait; }
+
+.resultado { margin-top: 1.25rem; }
+.resultado .vacio { color: var(--suave); }
+.resultado .error {
+    border-left: 4px solid var(--error);
+    padding: .5rem .75rem;
+    background: #fbeceb;
+    color: var(--error);
+}
+.resultado .ok-titulo { font-weight: 700; margin: 0 0 .5rem; }
+.resultado ol { padding-left: 1.2rem; margin: 0; }
+.resultado li { margin-bottom: .3rem; }
+.resultado .tramo { color: var(--suave); font-size: .9rem; display: block; }
+.resultado .nota { font-size: .85rem; color: var(--suave); margin-top: .75rem; }
+
+.leyenda {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: .4rem 1.2rem;
+    padding: 0;
+    margin: 0 0 .75rem;
+    font-size: .9rem;
+}
+.muestra {
+    display: inline-block;
+    width: 28px;
+    height: 0;
+    vertical-align: middle;
+    border-top: 4px solid;
+}
+.muestra.plano { border-color: var(--plano); }
+.muestra.rampa { border-color: var(--rampa); border-top-style: dashed; }
+.muestra.escalera { border-color: var(--escalera); border-top-style: dotted; border-top-width: 5px; }
+.muestra.cerrado { border-color: var(--cerrado); }
+.muestra.ruta { border-color: var(--ruta); border-top-width: 8px; }
+
+#mapa { width: 100%; height: auto; display: block; }
+#mapa .tramo { stroke-width: 5; fill: none; }
+#mapa .tramo.PLANO { stroke: var(--plano); }
+#mapa .tramo.RAMPA { stroke: var(--rampa); stroke-dasharray: 14 7; }
+#mapa .tramo.ESCALERA { stroke: var(--escalera); stroke-dasharray: 3 6; stroke-linecap: round; stroke-width: 6; }
+#mapa .tramo.cerrado { stroke: var(--cerrado); opacity: .6; }
+#mapa .resaltado { stroke: var(--ruta); stroke-width: 14; opacity: .55; }
+#mapa .etiqueta-tramo { font-size: 13px; fill: var(--suave); paint-order: stroke; stroke: var(--papel); stroke-width: 4px; }
+#mapa .etiqueta-cerrado { font-size: 13px; font-weight: 700; fill: var(--error); paint-order: stroke; stroke: var(--papel); stroke-width: 4px; }
+#mapa .lugar circle { fill: var(--papel); stroke: var(--tinta); stroke-width: 2.5; }
+#mapa .lugar.en-ruta circle { fill: var(--ruta); }
+#mapa .lugar text { font-size: 14px; font-weight: 600; fill: var(--tinta); paint-order: stroke; stroke: var(--papel); stroke-width: 4px; }
+
+details { margin-top: .75rem; font-size: .9rem; }
+summary { cursor: pointer; font-weight: 600; }
+
+.aviso {
+    margin: 0 2rem 2rem;
+    padding: .75rem 1rem;
+    border: 1px dashed var(--linea);
+    border-radius: 8px;
+    color: var(--suave);
+    font-size: .9rem;
+}

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>CampusAccesible · Rutas del campus</title>
+    <link rel="stylesheet" href="estilos.css">
+</head>
+<body>
+<a class="saltar" href="#planificar">Saltar al formulario</a>
+
+<header class="cabecera">
+    <h1>CampusAccesible</h1>
+    <p>Planifica tu recorrido dentro del campus y evita los tramos que no puedes usar.</p>
+</header>
+
+<main>
+    <section class="panel" id="planificar" aria-labelledby="titulo-planificar">
+        <h2 id="titulo-planificar">¿A dónde vas?</h2>
+        <form id="formulario" novalidate>
+            <label for="origen">Desde</label>
+            <select id="origen" name="origen" required>
+                <option value="">Elige el punto de partida</option>
+            </select>
+
+            <label for="destino">Hasta</label>
+            <select id="destino" name="destino" required>
+                <option value="">Elige el destino</option>
+            </select>
+
+            <label class="casilla">
+                <input type="checkbox" id="sinEscaleras" name="sinEscaleras">
+                Sin escaleras
+            </label>
+
+            <button type="submit">Buscar recorrido</button>
+        </form>
+
+        <div id="resultado" class="resultado" role="status" aria-live="polite">
+            <p class="vacio">Elige un origen y un destino para ver el recorrido.</p>
+        </div>
+    </section>
+
+    <section class="panel mapa" aria-labelledby="titulo-mapa">
+        <h2 id="titulo-mapa">Mapa esquemático</h2>
+        <ul class="leyenda" aria-label="Leyenda">
+            <li><span class="muestra plano"></span> Plano</li>
+            <li><span class="muestra rampa"></span> Rampa</li>
+            <li><span class="muestra escalera"></span> Escalera</li>
+            <li><span class="muestra cerrado"></span> Cerrado ✕</li>
+            <li><span class="muestra ruta"></span> Tu recorrido</li>
+        </ul>
+        <svg id="mapa" viewBox="0 0 900 420" role="img"
+             aria-labelledby="titulo-mapa desc-mapa">
+            <desc id="desc-mapa">Mapa del campus ficticio con sus lugares y los tramos que los unen.
+                La lista de tramos debajo del mapa tiene la misma información en texto.</desc>
+        </svg>
+        <details>
+            <summary>Ver los tramos como lista</summary>
+            <ul id="lista-tramos"></ul>
+        </details>
+    </section>
+</main>
+
+<footer class="aviso">
+    Prototipo académico con un campus y datos <strong>ficticios</strong>.
+    Los recorridos son orientativos y no certifican la seguridad física de la ruta.
+</footer>
+
+<script src="app.js"></script>
+</body>
+</html>
