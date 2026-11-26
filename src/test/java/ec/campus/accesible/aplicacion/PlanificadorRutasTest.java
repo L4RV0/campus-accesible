@@ -59,6 +59,39 @@ class PlanificadorRutasTest {
         assertThat(recorrido.metrosTotales()).isZero();
     }
 
+    /*
+     *   A ──(escalera 40)── B
+     *   └─(rampa 90)─ C ─(plano 30)─┘
+     */
+    @Test
+    @DisplayName("Regla 1 · HU-03: «sin escaleras» excluye la escalera aunque sea más corta")
+    void sinEscalerasExcluyeEscaleras() {
+        MapaDePrueba mapa = new MapaDePrueba()
+                .lugares("A", "B", "C")
+                .tramo("AB", "A", "B", ESCALERA, 40)
+                .tramo("AC", "A", "C", RAMPA, 90)
+                .tramo("CB", "C", "B", PLANO, 30);
+
+        Recorrido recorrido = new PlanificadorRutas(mapa).planificar("A", "B", Preferencias.evitarEscaleras());
+
+        assertThat(recorrido.tramos()).extracting(Tramo::tipo).doesNotContain(ESCALERA);
+        assertThat(recorrido.lugares()).extracting(Lugar::id).containsExactly("A", "C", "B");
+    }
+
+    @Test
+    @DisplayName("Regla 1 · HU-03: sin la preferencia, la escalera se usa si es más corta")
+    void sinPreferenciaUsaEscalera() {
+        MapaDePrueba mapa = new MapaDePrueba()
+                .lugares("A", "B", "C")
+                .tramo("AB", "A", "B", ESCALERA, 40)
+                .tramo("AC", "A", "C", RAMPA, 90)
+                .tramo("CB", "C", "B", PLANO, 30);
+
+        Recorrido recorrido = new PlanificadorRutas(mapa).planificar("A", "B", Preferencias.ninguna());
+
+        assertThat(recorrido.tramos()).extracting(Tramo::id).containsExactly("AB");
+    }
+
     @Test
     @DisplayName("HU-02: un lugar inexistente se rechaza con un mensaje claro")
     void lugarInexistente() {

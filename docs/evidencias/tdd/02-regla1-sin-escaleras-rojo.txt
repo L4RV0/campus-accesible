@@ -1,0 +1,11 @@
+﻿
+[INFO] Building campus-accesible 0.1.0
+[ERROR] Tests run: 6, Failures: 1, Errors: 0, Skipped: 0, Time elapsed: 0.348 s <<< FAILURE! -- in 
+ec.campus.accesible.aplicacion.PlanificadorRutasTest
+[ERROR] ec.campus.accesible.aplicacion.PlanificadorRutasTest.sinEscalerasExcluyeEscaleras -- Time elapsed: 0.038 s <<< 
+FAILURE!
+[ERROR]   PlanificadorRutasTest.sinEscalerasExcluyeEscaleras:77 
+[ERROR] Tests run: 6, Failures: 1, Errors: 0, Skipped: 0
+[INFO] BUILD FAILURE
+
+
