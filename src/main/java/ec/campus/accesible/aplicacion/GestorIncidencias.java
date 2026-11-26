@@ -3,6 +3,7 @@ package ec.campus.accesible.aplicacion;
 import ec.campus.accesible.dominio.Incidencia;
 
 import java.time.Clock;
+import java.time.LocalDateTime;
 
 public class GestorIncidencias implements IGestorIncidencias {
 
@@ -18,6 +19,8 @@ public class GestorIncidencias implements IGestorIncidencias {
 
     @Override
     public Incidencia reportar(String tramoId, String descripcion) {
-        throw new UnsupportedOperationException("Pendiente: HU-06");
+        String id = String.format("INC-%03d", incidencias.todas().size() + 1);
+        Incidencia incidencia = new Incidencia(id, tramoId, descripcion, LocalDateTime.now(reloj));
+        return incidencias.guardar(incidencia);
     }
 }
