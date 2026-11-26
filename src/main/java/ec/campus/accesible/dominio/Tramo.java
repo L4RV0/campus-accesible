@@ -38,6 +38,11 @@ public class Tramo {
         throw new IllegalArgumentException("El tramo " + id + " no pasa por " + lugarId);
     }
 
+    /** Regla 2: un tramo cerrado no se recomienda. */
+    public boolean disponible() {
+        return !cerrado;
+    }
+
     public void cerrar() {
         cerrado = true;
     }

@@ -6,7 +6,6 @@ import ec.campus.accesible.dominio.MotivoSinRecorrido;
 import ec.campus.accesible.dominio.Preferencias;
 import ec.campus.accesible.dominio.Recorrido;
 import ec.campus.accesible.dominio.SinRecorridoCompatibleException;
-import ec.campus.accesible.dominio.TipoTramo;
 import ec.campus.accesible.dominio.Tramo;
 
 import java.util.ArrayList;
@@ -17,8 +16,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.PriorityQueue;
+import java.util.function.Predicate;
 
-/** Calcula el recorrido más corto (Dijkstra) sobre el grafo del campus. */
+/**
+ * Calcula el recorrido más corto (Dijkstra) usando solo los tramos que el visitante puede usar.
+ * Si no hay ninguno, vuelve a buscar relajando cada restricción para explicar el motivo (regla 3).
+ */
 public class PlanificadorRutas implements IPlanificadorRutas {
 
     private final IMapaRepository mapa;
@@ -32,36 +35,45 @@ public class PlanificadorRutas implements IPlanificadorRutas {
         Lugar origen = buscarLugar(origenId);
         Lugar destino = buscarLugar(destinoId);
 
-        Optional<Recorrido> recorrido = buscar(origen, destino, preferencias.sinEscaleras(), true);
-        if (recorrido.isPresent()) {
-            return recorrido.get();
-        }
+        Predicate<Tramo> respetaPreferencias = preferencias::admite;
+        Predicate<Tramo> abierto = Tramo::disponible;
 
-        List<MotivoSinRecorrido> motivos = new ArrayList<>();
-        String mensaje;
-        if (preferencias.sinEscaleras() && buscar(origen, destino, false, true).isPresent()) {
-            motivos.add(MotivoSinRecorrido.ESCALERAS);
-            mensaje = "No hay un recorrido sin escaleras disponible entre "
-                    + origen.nombre() + " y " + destino.nombre();
-        } else if (buscar(origen, destino, preferencias.sinEscaleras(), false).isPresent()) {
-            motivos.add(MotivoSinRecorrido.TRAMOS_CERRADOS);
-            mensaje = "No hay un recorrido disponible entre "
-                    + origen.nombre() + " y " + destino.nombre() + ": hay tramos cerrados";
-        } else if (buscar(origen, destino, false, false).isPresent()) {
-            motivos.add(MotivoSinRecorrido.ESCALERAS);
-            motivos.add(MotivoSinRecorrido.TRAMOS_CERRADOS);
-            mensaje = "No hay un recorrido sin escaleras disponible entre "
-                    + origen.nombre() + " y " + destino.nombre() + ": hay tramos cerrados";
-        } else {
-            motivos.add(MotivoSinRecorrido.SIN_CONEXION);
-            mensaje = "No hay un recorrido disponible entre "
-                    + origen.nombre() + " y " + destino.nombre() + ": los lugares no están conectados";
-        }
-        throw new SinRecorridoCompatibleException(mensaje, motivos);
+        return buscar(origen, destino, respetaPreferencias.and(abierto))
+                .orElseThrow(() -> sinRecorrido(origen, destino, respetaPreferencias, abierto));
     }
 
-    private Optional<Recorrido> buscar(Lugar origen, Lugar destino,
-                                       boolean evitarEscaleras, boolean respetarCierres) {
+    private SinRecorridoCompatibleException sinRecorrido(Lugar origen, Lugar destino,
+                                                         Predicate<Tramo> respetaPreferencias,
+                                                         Predicate<Tramo> abierto) {
+        List<MotivoSinRecorrido> motivos = new ArrayList<>();
+        if (buscar(origen, destino, abierto).isPresent()) {
+            motivos.add(MotivoSinRecorrido.ESCALERAS);
+        } else if (buscar(origen, destino, respetaPreferencias).isPresent()) {
+            motivos.add(MotivoSinRecorrido.TRAMOS_CERRADOS);
+        } else if (buscar(origen, destino, tramo -> true).isPresent()) {
+            motivos.add(MotivoSinRecorrido.ESCALERAS);
+            motivos.add(MotivoSinRecorrido.TRAMOS_CERRADOS);
+        } else {
+            motivos.add(MotivoSinRecorrido.SIN_CONEXION);
+        }
+        return new SinRecorridoCompatibleException(mensaje(origen, destino, motivos), motivos);
+    }
+
+    private static String mensaje(Lugar origen, Lugar destino, List<MotivoSinRecorrido> motivos) {
+        String entre = " disponible entre " + origen.nombre() + " y " + destino.nombre();
+        String inicio = motivos.contains(MotivoSinRecorrido.ESCALERAS)
+                ? "No hay un recorrido sin escaleras" + entre
+                : "No hay un recorrido" + entre;
+        if (motivos.contains(MotivoSinRecorrido.TRAMOS_CERRADOS)) {
+            return inicio + ": hay tramos cerrados";
+        }
+        if (motivos.contains(MotivoSinRecorrido.SIN_CONEXION)) {
+            return inicio + ": los lugares no están conectados";
+        }
+        return inicio;
+    }
+
+    private Optional<Recorrido> buscar(Lugar origen, Lugar destino, Predicate<Tramo> usable) {
         Map<String, Integer> distancia = new HashMap<>();
         Map<String, Tramo> llegoPor = new HashMap<>();
         PriorityQueue<String> pendientes =
@@ -76,13 +88,7 @@ public class PlanificadorRutas implements IPlanificadorRutas {
                 return Optional.of(reconstruir(origen, destino, llegoPor));
             }
             for (Tramo tramo : mapa.tramos()) {
-                if (!tramo.conecta(actual)) {
-                    continue;
-                }
-                if (evitarEscaleras && tramo.tipo() == TipoTramo.ESCALERA) {
-                    continue;
-                }
-                if (respetarCierres && tramo.cerrado()) {
+                if (!tramo.conecta(actual) || !usable.test(tramo)) {
                     continue;
                 }
                 String vecino = tramo.otroExtremo(actual);

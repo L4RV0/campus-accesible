@@ -10,4 +10,9 @@ public record Preferencias(boolean sinEscaleras) {
     public static Preferencias evitarEscaleras() {
         return new Preferencias(true);
     }
+
+    /** Regla 1: con «sin escaleras» activo, ningún tramo de escalera es aceptable. */
+    public boolean admite(Tramo tramo) {
+        return !(sinEscaleras && tramo.tipo() == TipoTramo.ESCALERA);
+    }
 }
