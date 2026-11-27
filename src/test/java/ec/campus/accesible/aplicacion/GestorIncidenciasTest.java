@@ -13,6 +13,12 @@ import java.time.Clock;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.List;
+import java.util.concurrent.CyclicBarrier;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
 
 import static ec.campus.accesible.dominio.TipoTramo.RAMPA;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -34,6 +40,42 @@ class GestorIncidenciasTest {
                 .tramo("T05", "BIB", "BLB", RAMPA, 90);
         incidencias = new IncidenciasDePrueba();
         gestor = new GestorIncidencias(mapa, incidencias, reloj);
+    }
+
+    /**
+     * Encontrado por Ángel en la revisión del PR #15: dos reportes al mismo tiempo recibían
+     * el mismo ID y el segundo reemplazaba al primero. La barrera obliga a que los dos hilos
+     * consulten el repositorio antes de que cualquiera guarde, que es el peor caso.
+     */
+    @Test
+    @DisplayName("HU-06: dos reportes simultáneos reciben IDs distintos y se guardan los dos")
+    void reportesSimultaneos() throws Exception {
+        CyclicBarrier ambosLeyeron = new CyclicBarrier(2);
+        IncidenciasDePrueba lenta = new IncidenciasDePrueba() {
+            @Override
+            public List<Incidencia> todas() {
+                List<Incidencia> copia = super.todas();
+                try {
+                    ambosLeyeron.await(1, TimeUnit.SECONDS);
+                } catch (Exception sinEspera) {
+                    // si el gestor ya no consulta el repositorio para el ID, nadie espera aquí
+                }
+                return copia;
+            }
+        };
+        GestorIncidencias gestorConcurrente = new GestorIncidencias(mapa, lenta, reloj);
+
+        ExecutorService hilos = Executors.newFixedThreadPool(2);
+        try {
+            Future<Incidencia> primero = hilos.submit(() -> gestorConcurrente.reportar("T05", "Rampa bloqueada"));
+            Future<Incidencia> segundo = hilos.submit(() -> gestorConcurrente.reportar("T05", "Charco en la rampa"));
+
+            assertThat(primero.get(5, TimeUnit.SECONDS).id())
+                    .isNotEqualTo(segundo.get(5, TimeUnit.SECONDS).id());
+            assertThat(lenta.todas()).hasSize(2);
+        } finally {
+            hilos.shutdownNow();
+        }
     }
 
     @Test
