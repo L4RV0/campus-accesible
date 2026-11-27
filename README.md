@@ -65,10 +65,34 @@ Después de `.\mvnw.cmd test`, el reporte de cobertura queda en `target/site/jac
 
 La evidencia del ciclo rojo–verde–refactor está en el historial de commits (`test(...): rojo`, `feat(...): verde`, `refactor:`) y en las salidas guardadas en [docs/evidencias/tdd](docs/evidencias/tdd).
 
+## Del modelo al código
+
+| Nivel C4 | Dónde está |
+|----------|------------|
+| 1 · Contexto y 2 · Contenedores | `docs/arquitectura/workspace.dsl` (vistas `Nivel1_Contexto` y `Nivel2_Contenedores`) |
+| 3 · Componentes | El mismo archivo, vista `Nivel3_Componentes`. Cada componente es una clase. |
+| 4 · Código | [docs/arquitectura/nivel4-codigo.md](docs/arquitectura/nivel4-codigo.md), solo del planificador |
+
+**Diagramas visuales y editables (FigJam):** https://www.figma.com/board/5324U5ZJn1I39AflSS6G6p, con los niveles 1 a 4 y la matriz de trazabilidad.
+
+`workspace.dsl` es la versión en código del mismo modelo, y es la que comprueban las pruebas.
+
+La [matriz de trazabilidad](docs/matriz-trazabilidad.md) sigue 5 historias hasta su componente, su método y su prueba.
+
+**¿Cómo sabemos que el diagrama no quedó desactualizado?** Dos pruebas lo comprueban en cada build:
+
+| Prueba | Qué compara |
+|--------|-------------|
+| `ModeloSincronizadoTest` | Los componentes de `workspace.dsl` con las clases reales, en los dos sentidos |
+| `MatrizTrazabilidadTest` | Que cada fila de la matriz apunte a un componente, un método y una prueba que existan |
+| `ArquitecturaTest` | Las flechas del diagrama: `dominio` y `aplicacion` no dependen de Spring, `api` ni `infraestructura` |
+
 ## Estructura
 
 ```
 docs/
+  arquitectura/              modelo C4 como código y vista de código del planificador
+  matriz-trazabilidad.md     historia → componente → código → prueba
   backlog.md                 visión, historias, RNF, prioridades, roadmap y cambio de requisito
   kanban.md                  columnas, políticas, WIP, DoD y registro de métricas
   evidencias/tdd/            salida de las pruebas en cada fase rojo/verde/refactor
