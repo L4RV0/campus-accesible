@@ -11,19 +11,19 @@ class IncidenciasDePrueba implements IIncidenciaRepository {
     private final List<Incidencia> guardadas = new ArrayList<>();
 
     @Override
-    public Incidencia guardar(Incidencia incidencia) {
+    public synchronized Incidencia guardar(Incidencia incidencia) {
         guardadas.removeIf(i -> i.id().equals(incidencia.id()));
         guardadas.add(incidencia);
         return incidencia;
     }
 
     @Override
-    public Optional<Incidencia> buscar(String id) {
+    public synchronized Optional<Incidencia> buscar(String id) {
         return guardadas.stream().filter(i -> i.id().equals(id)).findFirst();
     }
 
     @Override
-    public List<Incidencia> todas() {
+    public synchronized List<Incidencia> todas() {
         return List.copyOf(guardadas);
     }
 }

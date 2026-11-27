@@ -5,12 +5,14 @@ import ec.campus.accesible.dominio.TramoNoEncontradoException;
 
 import java.time.Clock;
 import java.time.LocalDateTime;
+import java.util.concurrent.atomic.AtomicLong;
 
 public class GestorIncidencias implements IGestorIncidencias {
 
     private final IMapaRepository mapa;
     private final IIncidenciaRepository incidencias;
     private final Clock reloj;
+    private final AtomicLong contador = new AtomicLong();
 
     public GestorIncidencias(IMapaRepository mapa, IIncidenciaRepository incidencias, Clock reloj) {
         this.mapa = mapa;
@@ -27,7 +29,11 @@ public class GestorIncidencias implements IGestorIncidencias {
         return incidencias.guardar(incidencia);
     }
 
+    /**
+     * El contador se incrementa de forma atómica: dos reportes simultáneos nunca reciben el mismo ID.
+     * Antes se usaba «cantidad guardada + 1», que fallaba con reportes al mismo tiempo (revisión del PR #15).
+     */
     private String siguienteId() {
-        return String.format("INC-%03d", incidencias.todas().size() + 1);
+        return String.format("INC-%03d", contador.incrementAndGet());
     }
 }
