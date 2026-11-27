@@ -1,0 +1,6 @@
+[ERROR] Tests run: 4, Failures: 2, Errors: 0, Skipped: 0, Time elapsed: 0.119 s <<< FAILURE! -- in ec.campus.accesible.aplicacion.GestorIncidenciasTest
+[ERROR] ec.campus.accesible.aplicacion.GestorIncidenciasTest.sinDescripcion -- Time elapsed: 0.098 s <<< FAILURE!
+[ERROR] ec.campus.accesible.aplicacion.GestorIncidenciasTest.tramoInexistente -- Time elapsed: 0.001 s <<< FAILURE!
+[ERROR]   GestorIncidenciasTest.sinDescripcion:61 
+[ERROR]   GestorIncidenciasTest.tramoInexistente:70 
+[ERROR] Tests run: 25, Failures: 2, Errors: 0, Skipped: 0

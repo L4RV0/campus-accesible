@@ -3,6 +3,7 @@ package ec.campus.accesible.api;
 import ec.campus.accesible.dominio.LugarNoEncontradoException;
 import ec.campus.accesible.dominio.MotivoSinRecorrido;
 import ec.campus.accesible.dominio.SinRecorridoCompatibleException;
+import ec.campus.accesible.dominio.TramoNoEncontradoException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -28,10 +29,16 @@ public class ManejadorErrores {
         }
     }
 
-    @ExceptionHandler(LugarNoEncontradoException.class)
+    @ExceptionHandler({LugarNoEncontradoException.class, TramoNoEncontradoException.class})
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    Error lugarNoEncontrado(LugarNoEncontradoException e) {
+    Error noEncontrado(RuntimeException e) {
         return new Error(e.getMessage());
+    }
+
+    @ExceptionHandler(org.springframework.http.converter.HttpMessageNotReadableException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    Error cuerpoInvalido(Exception e) {
+        return new Error("Los datos enviados no tienen el formato esperado");
     }
 
     @ExceptionHandler(SinRecorridoCompatibleException.class)

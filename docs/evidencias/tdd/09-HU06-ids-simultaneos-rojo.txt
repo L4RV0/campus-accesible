@@ -1,0 +1,8 @@
+[ERROR] Tests run: 6, Failures: 1, Errors: 0, Skipped: 0, Time elapsed: 0.384 s <<< FAILURE! -- in ec.campus.accesible.aplicacion.GestorIncidenciasTest
+[ERROR] ec.campus.accesible.aplicacion.GestorIncidenciasTest.reportesSimultaneos -- Time elapsed: 0.019 s <<< FAILURE!
+Expecting actual:
+not to be equal to:
+[ERROR]   GestorIncidenciasTest.reportesSimultaneos:74 
+Expecting actual:
+not to be equal to:
+[ERROR] Tests run: 6, Failures: 1, Errors: 0, Skipped: 0
