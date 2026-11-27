@@ -2,6 +2,8 @@
 
 Cada fila sigue una historia desde su criterio de aceptación hasta la prueba que lo comprueba, pasando por el elemento del modelo C4 ([workspace.dsl](arquitectura/workspace.dsl)) y el método que lo implementa.
 
+Versión visual en FigJam (último diagrama del tablero): https://www.figma.com/board/lePZWlkkVanQ41TG3kzr2b
+
 `MatrizTrazabilidadTest` lee esta tabla en cada build: si se renombra o se borra una clase, un método o una prueba que aparece aquí, el CI falla y obliga a actualizar la matriz.
 
 | Historia · criterio | Componente C4 | Implementación | Prueba | Resultado |

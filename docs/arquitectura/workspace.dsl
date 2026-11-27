@@ -1,8 +1,8 @@
 /*
  * Modelo C4 de CampusAccesible, escrito como código (Structurizr DSL).
  *
- * Cómo verlo: copia este archivo en https://structurizr.com/dsl y pulsa «Render»,
- * o ábrelo con Structurizr Lite.
+ * Versión visual y editable: https://www.figma.com/board/lePZWlkkVanQ41TG3kzr2b
+ * Este archivo es la fuente que comprueban las pruebas. También se abre con Structurizr Lite.
  *
  * Regla del equipo: cada «component» de este archivo es una clase real del paquete
  * indicado en su tecnología. ModeloSincronizadoTest falla si el modelo y el código

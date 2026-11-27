@@ -73,7 +73,9 @@ La evidencia del ciclo rojo–verde–refactor está en el historial de commits 
 | 3 · Componentes | El mismo archivo, vista `Nivel3_Componentes`. Cada componente es una clase. |
 | 4 · Código | [docs/arquitectura/nivel4-codigo.md](docs/arquitectura/nivel4-codigo.md), solo del planificador |
 
-Para ver los diagramas, pega `workspace.dsl` en https://structurizr.com/dsl y pulsa **Render**.
+**Diagramas visuales y editables (FigJam):** https://www.figma.com/board/lePZWlkkVanQ41TG3kzr2b, con los niveles 1 a 4 y la matriz de trazabilidad.
+
+`workspace.dsl` es la versión en código del mismo modelo, y es la que comprueban las pruebas.
 
 La [matriz de trazabilidad](docs/matriz-trazabilidad.md) sigue 5 historias hasta su componente, su método y su prueba.
 
