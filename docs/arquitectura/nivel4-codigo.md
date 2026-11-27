@@ -74,7 +74,7 @@ classDiagram
     PlanificadorRutas ..> Recorrido : devuelve
     PlanificadorRutas ..> SinRecorridoCompatibleException : regla 3
     Tramo --> TipoTramo
-    Recorrido "1" o-- "0..*" Tramo
+    Recorrido "0..*" --> "0..*" Tramo : tramos en orden
     SinRecorridoCompatibleException --> "1..*" MotivoSinRecorrido
 ```
 
@@ -85,6 +85,10 @@ classDiagram
 | 1 · «Sin escaleras» excluye esos tramos | `Preferencias.admite(tramo)` | `PlanificadorRutasTest.sinEscalerasExcluyeEscaleras` |
 | 2 · Un tramo cerrado no se recomienda | `Tramo.disponible()` | `PlanificadorRutasTest.tramoCerradoNoSeRecomienda` |
 | 3 · Si no hay ruta compatible se informa | `PlanificadorRutas.sinRecorrido(...)` | `PlanificadorRutasTest.sinRutaPorEscaleras` |
+
+## Multiplicidad Recorrido–Tramo
+
+Un recorrido usa cero o más tramos, en orden. Un mismo tramo del mapa puede aparecer en muchos recorridos o en ninguno, y no le pertenece a un recorrido. Por eso es una asociación `0..*` a `0..*` y no una agregación «1 a muchos». Lo corrigió Ángel en la revisión del PR #16.
 
 ## Decisión de diseño
 
