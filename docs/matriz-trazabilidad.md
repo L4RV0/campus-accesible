@@ -10,10 +10,11 @@ Versión visual en FigJam (último diagrama del tablero): https://www.figma.com/
 |---|---|---|---|---|
 | HU-02 · Recibir el recorrido más corto entre origen y destino | `PlanificadorRutas` | `PlanificadorRutas.planificar` | `PlanificadorRutasTest.eligeElCaminoMasCorto` | Verde en CI · HU-02 revisada por Ángel (26/11) |
 | HU-03 · Con «sin escaleras» ningún tramo del resultado es escalera | `PlanificadorRutas` | `Preferencias.admite` | `PlanificadorRutasTest.sinEscalerasExcluyeEscaleras` | Verde en CI · PR #1 aprobado por Ángel (26/11) |
-| HU-04 · Un tramo cerrado no se recomienda | `PlanificadorRutas` | `Tramo.disponible` | `PlanificadorRutasTest.tramoCerradoNoSeRecomienda` | Verde en CI · HU-04 revisada por Ángel (26/11) |
+| HU-04 · Un tramo cerrado no se recomienda (desde HU-10, según la fecha de consulta) | `PlanificadorRutas` | `Tramo.disponibleEn` | `PlanificadorRutasTest.tramoCerradoNoSeRecomienda` | Verde en CI · HU-04 revisada por Ángel (26/11) |
 | HU-05 · Sin ruta compatible se informa el motivo | `ManejadorErrores` | `PlanificadorRutas.planificar` | `RutasApiIntegracionTest.auditorioSinEscalerasNoTieneRuta` | Verde en CI · HU-05 revisada por Erick (26/11) |
 | HU-06 · Un reporte válido queda «reportada» con su fecha | `GestorIncidencias` | `GestorIncidencias.reportar` | `GestorIncidenciasTest.reporteValido` | Verde en CI · PR #15 aprobado por Ángel y Erick (26/11) |
-| HU-07 · Validar una incidencia cierra el tramo y recalcula el recorrido | `GestorIncidencias` | `GestorIncidencias.validar` | `ValidacionApiIntegracionTest.demoValidarYRecalcular` | Verde en CI · demo 210 m → 450 m · PR de HU-07 |
+| HU-07 · Validar una incidencia cierra el tramo y recalcula el recorrido | `GestorIncidencias` | `GestorIncidencias.validar` | `ValidacionApiIntegracionTest.demoValidarYRecalcular` | Verde en CI · demo 210 m → 450 m · PR #18 |
+| HU-10 · Durante un cierre temporal la rampa no se usa y al terminar vuelve sola | `GestorCierres` | `CierreTemporal.vigenteEn` | `CierreTemporalTest.duranteElCierreNoSeUsaLaRampa` | Verde en CI · cambio de requisito · PR de HU-10 |
 
 ## Cómo leer una fila
 
@@ -27,4 +28,4 @@ Tomando HU-03 como ejemplo:
 
 ## Cuando cambia un requisito
 
-Con el cambio «cierre temporal de una rampa» (HU-10), la fila de HU-04 tendrá que apuntar a la nueva regla de disponibilidad por fecha. Si el método cambia de nombre y nadie actualiza esta tabla, `MatrizTrazabilidadTest` lo detecta.
+Con el cambio «cierre temporal de una rampa» (HU-10), la regla de HU-04 pasó a evaluarse según la fecha de la consulta: la fila ahora apunta a `Tramo.disponibleEn`. Al agregar `TramosController` y `GestorCierres`, `ModeloSincronizadoTest` falló hasta que se dibujaron en el C4 (evidencia en `docs/evidencias/modelo-detecto-cambio-HU10.txt`).

@@ -26,7 +26,9 @@ workspace "CampusAccesible" "Rutas e incidencias de accesibilidad en un campus f
                 incidenciasController = component "IncidenciasController" "Expone POST /api/incidencias (reportar) y POST /api/incidencias/{id}/validacion y /rechazo (solo con X-Rol: GESTOR)." "api"
                 manejadorErrores = component "ManejadorErrores" "Traduce errores a 400/404/422 con mensaje legible, sin traza (RNF-03)." "api"
 
-                planificador = component "PlanificadorRutas" "Busca el recorrido más corto (Dijkstra) con los tramos que el visitante puede usar y explica por qué no hay ruta." "aplicacion"
+                planificador = component "PlanificadorRutas" "Busca el recorrido más corto (Dijkstra) con los tramos disponibles en el momento de la consulta (cierres manuales y temporales) y explica por qué no hay ruta." "aplicacion"
+                tramosController = component "TramosController" "Expone POST /api/tramos/{id}/cierres para programar cierres temporales (solo X-Rol: GESTOR)." "api"
+                gestorCierres = component "GestorCierres" "Programa cierres temporales de un tramo con fecha de inicio y fin (HU-10)." "aplicacion"
                 gestorIncidencias = component "GestorIncidencias" "Registra reportes y los valida o rechaza; validar cierra el tramo. (Pendiente HU-09: resolver.)" "aplicacion"
 
                 mapaRepo = component "MapaCampusEnMemoria" "Lugares y tramos del campus ficticio (8 lugares, 11 tramos)." "infraestructura"
@@ -37,12 +39,15 @@ workspace "CampusAccesible" "Rutas e incidencias de accesibilidad en un campus f
         visitante -> campus.web "Elige origen, destino y «sin escaleras»"
         visitante -> campus.api.incidenciasController "Reporta una barrera (hoy solo por la API; formulario web pendiente)" "JSON/HTTP"
         gestor -> campus.api.incidenciasController "Valida o rechaza incidencias (hoy solo por la API; pantalla del gestor pendiente)" "JSON/HTTP, X-Rol: GESTOR"
+        gestor -> campus.api.tramosController "Programa cierres temporales (hoy solo por la API)" "JSON/HTTP, X-Rol: GESTOR"
         campus.web -> campus.api.rutasController "Pide mapa y recorridos" "JSON/HTTP"
 
         campus.api.rutasController -> campus.api.planificador "planificar(origen, destino, preferencias)" "IPlanificadorRutas"
         campus.api.rutasController -> campus.api.mapaRepo "Lee lugares y tramos" "IMapaRepository"
         campus.api.incidenciasController -> campus.api.gestorIncidencias "reportar, validar y rechazar" "IGestorIncidencias"
-        campus.api.planificador -> campus.api.mapaRepo "Lee tramos y su estado" "IMapaRepository"
+        campus.api.tramosController -> campus.api.gestorCierres "programar(tramoId, inicio, fin)" "IGestorCierres"
+        campus.api.gestorCierres -> campus.api.mapaRepo "Agrega el cierre al tramo" "IMapaRepository"
+        campus.api.planificador -> campus.api.mapaRepo "Lee tramos y su disponibilidad en la fecha de consulta" "IMapaRepository"
         campus.api.gestorIncidencias -> campus.api.mapaRepo "Comprueba el tramo y lo cierra al validar" "IMapaRepository"
         campus.api.gestorIncidencias -> campus.api.incidenciaRepo "Guarda y consulta incidencias" "IIncidenciaRepository"
     }

@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.time.Clock;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -22,16 +24,18 @@ public class RutasController {
 
     private final IMapaRepository mapa;
     private final IPlanificadorRutas planificador;
+    private final Clock reloj;
 
-    public RutasController(IMapaRepository mapa, IPlanificadorRutas planificador) {
+    public RutasController(IMapaRepository mapa, IPlanificadorRutas planificador, Clock reloj) {
         this.mapa = mapa;
         this.planificador = planificador;
+        this.reloj = reloj;
     }
 
     /** HU-01: lugares y tramos con su tipo y estado. */
     @GetMapping("/mapa")
     public MapaDto mapa() {
-        return new MapaDto(mapa.lugares(), mapa.tramos().stream().map(TramoDto::de).toList());
+        return new MapaDto(mapa.lugares(), mapa.tramos().stream().map(t -> TramoDto.de(t, ahora())).toList());
     }
 
     /** HU-02 a HU-05: recorrido más corto que respeta preferencias y cierres. */
@@ -42,9 +46,13 @@ public class RutasController {
         Recorrido recorrido = planificador.planificar(origen, destino, new Preferencias(sinEscaleras));
         return new RecorridoDto(
                 recorrido.lugares(),
-                recorrido.tramos().stream().map(TramoDto::de).toList(),
+                recorrido.tramos().stream().map(t -> TramoDto.de(t, ahora())).toList(),
                 recorrido.metrosTotales(),
                 AVISO);
+    }
+
+    private LocalDateTime ahora() {
+        return LocalDateTime.now(reloj);
     }
 
     public record MapaDto(List<Lugar> lugares, List<TramoDto> tramos) {
@@ -54,8 +62,9 @@ public class RutasController {
     }
 
     public record TramoDto(String id, String desde, String hasta, String tipo, int metros, boolean cerrado) {
-        static TramoDto de(Tramo t) {
-            return new TramoDto(t.id(), t.extremoA(), t.extremoB(), t.tipo().name(), t.metros(), !t.disponible());
+        /** «cerrado» incluye los cierres temporales vigentes (HU-10), para que el mapa los muestre. */
+        static TramoDto de(Tramo t, LocalDateTime ahora) {
+            return new TramoDto(t.id(), t.extremoA(), t.extremoB(), t.tipo().name(), t.metros(), !t.disponibleEn(ahora));
         }
     }
 }

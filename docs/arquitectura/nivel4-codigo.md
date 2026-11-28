@@ -37,9 +37,17 @@ classDiagram
         -TipoTramo tipo
         -int metros
         -boolean cerrado
-        +disponible() boolean
+        +disponibleEn(momento) boolean
+        +agregarCierre(cierre)
         +conecta(lugarId) boolean
         +otroExtremo(lugarId) String
+    }
+
+    class CierreTemporal {
+        <<record>>
+        +LocalDateTime inicio
+        +LocalDateTime fin
+        +vigenteEn(momento) boolean
     }
 
     class TipoTramo {
@@ -70,7 +78,8 @@ classDiagram
     IPlanificadorRutas <|.. PlanificadorRutas
     PlanificadorRutas --> IMapaRepository : usa
     PlanificadorRutas ..> Preferencias : regla 1
-    PlanificadorRutas ..> Tramo : regla 2
+    PlanificadorRutas ..> Tramo : regla 2 según la fecha
+    Tramo "1" *-- "0..*" CierreTemporal : HU-10
     PlanificadorRutas ..> Recorrido : devuelve
     PlanificadorRutas ..> SinRecorridoCompatibleException : regla 3
     Tramo --> TipoTramo
@@ -83,7 +92,7 @@ classDiagram
 | Regla del enunciado | Clase y método | Prueba que la protege |
 |---|---|---|
 | 1 · «Sin escaleras» excluye esos tramos | `Preferencias.admite(tramo)` | `PlanificadorRutasTest.sinEscalerasExcluyeEscaleras` |
-| 2 · Un tramo cerrado no se recomienda | `Tramo.disponible()` | `PlanificadorRutasTest.tramoCerradoNoSeRecomienda` |
+| 2 · Un tramo cerrado no se recomienda (con HU-10, también durante un cierre temporal) | `Tramo.disponibleEn(momento)` + `CierreTemporal.vigenteEn` | `PlanificadorRutasTest.tramoCerradoNoSeRecomienda` |
 | 3 · Si no hay ruta compatible se informa | `PlanificadorRutas.sinRecorrido(...)` | `PlanificadorRutasTest.sinRutaPorEscaleras` |
 
 ## Multiplicidad Recorrido–Tramo
