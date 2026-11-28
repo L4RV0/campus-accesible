@@ -12,7 +12,8 @@ Versión visual en FigJam (último diagrama del tablero): https://www.figma.com/
 | HU-03 · Con «sin escaleras» ningún tramo del resultado es escalera | `PlanificadorRutas` | `Preferencias.admite` | `PlanificadorRutasTest.sinEscalerasExcluyeEscaleras` | Verde en CI · PR #1 aprobado por Ángel (26/11) |
 | HU-04 · Un tramo cerrado no se recomienda | `PlanificadorRutas` | `Tramo.disponible` | `PlanificadorRutasTest.tramoCerradoNoSeRecomienda` | Verde en CI · HU-04 revisada por Ángel (26/11) |
 | HU-05 · Sin ruta compatible se informa el motivo | `ManejadorErrores` | `PlanificadorRutas.planificar` | `RutasApiIntegracionTest.auditorioSinEscalerasNoTieneRuta` | Verde en CI · HU-05 revisada por Erick (26/11) |
-| HU-06 · Un reporte válido queda «reportada» con su fecha | `GestorIncidencias` | `GestorIncidencias.reportar` | `GestorIncidenciasTest.reporteValido` | Verde en CI · PR #15 en revisión |
+| HU-06 · Un reporte válido queda «reportada» con su fecha | `GestorIncidencias` | `GestorIncidencias.reportar` | `GestorIncidenciasTest.reporteValido` | Verde en CI · PR #15 aprobado por Ángel y Erick (26/11) |
+| HU-07 · Validar una incidencia cierra el tramo y recalcula el recorrido | `GestorIncidencias` | `GestorIncidencias.validar` | `ValidacionApiIntegracionTest.demoValidarYRecalcular` | Verde en CI · demo 210 m → 450 m · PR de HU-07 |
 
 ## Cómo leer una fila
 
