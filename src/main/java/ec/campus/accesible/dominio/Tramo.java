@@ -1,7 +1,7 @@
 package ec.campus.accesible.dominio;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.List;
 
 /**
@@ -16,7 +16,11 @@ public class Tramo {
     private final TipoTramo tipo;
     private final int metros;
     private boolean cerrado;
-    private final List<CierreTemporal> cierres = new ArrayList<>();
+    /**
+     * Lista segura entre hilos: el gestor puede programar un cierre mientras otros consultan rutas
+     * (revisión de Erick en el PR #19). Se leen muchas más veces de las que se escriben.
+     */
+    private final List<CierreTemporal> cierres = new CopyOnWriteArrayList<>();
 
     public Tramo(String id, String extremoA, String extremoB, TipoTramo tipo, int metros) {
         if (metros <= 0) {
