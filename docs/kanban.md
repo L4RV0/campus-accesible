@@ -85,7 +85,7 @@ Tomar tres capturas del tablero en momentos distintos y guardarlas en `docs/evid
 
 ## Cuello de botella y mejora
 
-**Dónde se acumuló el trabajo.** El 26/11, HU-01 a HU-05 tenían el código terminado a la 01:50, pero llegaron a Hecho entre las 15:25 y las 19:12. Pasaron entre 13 y 17 horas en «En revisión», con 5 tarjetas a la vez en esa columna. La columna no tenía límite WIP, y los PR #1 y #14 se abrieron sin revisor asignado. HU-02, HU-04 y HU-05 ni siquiera tenían PR, porque se habían integrado antes de crear el tablero.
+**Dónde se acumuló el trabajo.** El 26/11, HU-01 a HU-05 tenían el código terminado a la 01:50, pero llegaron a Hecho entre las 15:25 y las 19:12. Su cycle time (del primer commit al cierre del issue) fue de 13 a 17 horas, y la mayor parte de ese tiempo las 5 tarjetas estuvieron acumuladas en «En revisión», esperando a un revisor. GitHub Projects no guarda la hora exacta de cada movimiento de tarjeta, así que no medimos por separado cuánto duró la revisión. La columna no tenía límite WIP, y los PR #1 y #14 se abrieron sin revisor asignado. HU-02, HU-04 y HU-05 ni siquiera tenían PR, porque se habían integrado antes de crear el tablero.
 
 **Mejora aplicada.** Desde el PR #15, cada PR se abre con un revisor asignado y la tarjeta solo pasa a «En revisión» cuando hay PR y CI en verde.
 
