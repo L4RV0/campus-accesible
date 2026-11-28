@@ -29,6 +29,16 @@ public class GestorIncidencias implements IGestorIncidencias {
         return incidencias.guardar(incidencia);
     }
 
+    @Override
+    public Incidencia validar(String incidenciaId) {
+        throw new UnsupportedOperationException("Pendiente: HU-07");
+    }
+
+    @Override
+    public Incidencia rechazar(String incidenciaId) {
+        throw new UnsupportedOperationException("Pendiente: HU-07");
+    }
+
     /**
      * El contador se incrementa de forma atómica: dos reportes simultáneos nunca reciben el mismo ID.
      * Antes se usaba «cantidad guardada + 1», que fallaba con reportes al mismo tiempo (revisión del PR #15).

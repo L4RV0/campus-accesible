@@ -1,0 +1,9 @@
+[ERROR] Tests run: 5, Failures: 1, Errors: 4, Skipped: 0, Time elapsed: 0.380 s <<< FAILURE! -- in ec.campus.accesible.aplicacion.ValidacionIncidenciasTest
+[ERROR] ec.campus.accesible.aplicacion.ValidacionIncidenciasTest.validarCierraElTramo -- Time elapsed: 0.093 s <<< ERROR!
+[ERROR] ec.campus.accesible.aplicacion.ValidacionIncidenciasTest.incidenciaInexistente -- Time elapsed: 0.189 s <<< FAILURE!
+[ERROR] ec.campus.accesible.aplicacion.ValidacionIncidenciasTest.validarRecalculaElRecorrido -- Time elapsed: 0.036 s <<< ERROR!
+[ERROR] ec.campus.accesible.aplicacion.ValidacionIncidenciasTest.rechazarNoCambiaElTramo -- Time elapsed: 0.001 s <<< ERROR!
+[ERROR] ec.campus.accesible.aplicacion.ValidacionIncidenciasTest.noSeValidaUnaRechazada -- Time elapsed: 0.001 s <<< ERROR!
+[ERROR]   ValidacionIncidenciasTest.incidenciaInexistente:99 
+[ERROR]   ValidacionIncidenciasTest.noSeValidaUnaRechazada:87 » UnsupportedOperation Pendiente: HU-07
+[ERROR]   ValidacionIncidenciasTest.rechazarNoCambiaElTramo:76 » UnsupportedOperation Pendiente: HU-07
