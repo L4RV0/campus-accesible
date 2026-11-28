@@ -23,6 +23,24 @@ public class Incidencia {
         this.estado = EstadoIncidencia.REPORTADA;
     }
 
+    /** HU-07: solo una incidencia REPORTADA puede validarse. */
+    public void validar(LocalDateTime momento) {
+        cambiarA(EstadoIncidencia.VALIDADA, momento);
+    }
+
+    /** HU-07: solo una incidencia REPORTADA puede rechazarse. */
+    public void rechazar(LocalDateTime momento) {
+        cambiarA(EstadoIncidencia.RECHAZADA, momento);
+    }
+
+    private void cambiarA(EstadoIncidencia destino, LocalDateTime momento) {
+        if (estado != EstadoIncidencia.REPORTADA) {
+            throw new TransicionInvalidaException(id, estado, destino);
+        }
+        estado = destino;
+        fechaRevision = momento;
+    }
+
     public String id() { return id; }
     public String tramoId() { return tramoId; }
     public String descripcion() { return descripcion; }

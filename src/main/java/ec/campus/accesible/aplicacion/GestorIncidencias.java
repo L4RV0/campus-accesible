@@ -1,6 +1,7 @@
 package ec.campus.accesible.aplicacion;
 
 import ec.campus.accesible.dominio.Incidencia;
+import ec.campus.accesible.dominio.IncidenciaNoEncontradaException;
 import ec.campus.accesible.dominio.TramoNoEncontradoException;
 
 import java.time.Clock;
@@ -29,14 +30,29 @@ public class GestorIncidencias implements IGestorIncidencias {
         return incidencias.guardar(incidencia);
     }
 
+    /**
+     * Validar y cerrar el tramo se hacen juntos y de a uno (synchronized), para que nunca quede
+     * una incidencia VALIDADA con su tramo abierto (riesgo señalado en el ADR-0001).
+     */
     @Override
-    public Incidencia validar(String incidenciaId) {
-        throw new UnsupportedOperationException("Pendiente: HU-07");
+    public synchronized Incidencia validar(String incidenciaId) {
+        Incidencia incidencia = buscar(incidenciaId);
+        incidencia.validar(LocalDateTime.now(reloj));
+        mapa.tramo(incidencia.tramoId()).orElseThrow(() -> new TramoNoEncontradoException(incidencia.tramoId()))
+                .cerrar();
+        return incidencias.guardar(incidencia);
     }
 
     @Override
-    public Incidencia rechazar(String incidenciaId) {
-        throw new UnsupportedOperationException("Pendiente: HU-07");
+    public synchronized Incidencia rechazar(String incidenciaId) {
+        Incidencia incidencia = buscar(incidenciaId);
+        incidencia.rechazar(LocalDateTime.now(reloj));
+        return incidencias.guardar(incidencia);
+    }
+
+    private Incidencia buscar(String incidenciaId) {
+        return incidencias.buscar(incidenciaId)
+                .orElseThrow(() -> new IncidenciaNoEncontradaException(incidenciaId));
     }
 
     /**
