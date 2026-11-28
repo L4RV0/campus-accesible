@@ -69,6 +69,46 @@ class CierreTemporalTest {
         assertThat(tramosDeBibliotecaABloqueB(INICIO.minusMinutes(1))).isEqualTo(java.util.List.of("T05"));
     }
 
+    /**
+     * Encontrado por Erick en la revisión del PR #19: programar un cierre mientras otra persona
+     * consulta una ruta tocaba la misma lista a la vez y la consulta podía fallar.
+     * Los cierres que se agregan ya vencieron, así que no deben cambiar la respuesta.
+     */
+    @Test
+    @DisplayName("HU-10: programar cierres mientras se consultan rutas no hace fallar las consultas")
+    void cierresConcurrentesConConsultas() throws Exception {
+        Tramo rampa = mapa.tramo("T05").orElseThrow();
+        LocalDateTime consulta = LocalDateTime.of(2026, 12, 15, 12, 0);
+        java.util.concurrent.atomic.AtomicReference<Throwable> fallo = new java.util.concurrent.atomic.AtomicReference<>();
+        java.util.concurrent.CountDownLatch listos = new java.util.concurrent.CountDownLatch(2);
+
+        Thread gestor = new Thread(() -> {
+            listos.countDown();
+            for (int i = 0; i < 20_000; i++) {
+                LocalDateTime inicio = LocalDateTime.of(2025, 1, 1, 0, 0).plusMinutes(i);
+                rampa.agregarCierre(new CierreTemporal(inicio, inicio.plusSeconds(30)));
+            }
+        });
+        Thread visitante = new Thread(() -> {
+            listos.countDown();
+            try {
+                for (int i = 0; i < 20_000; i++) {
+                    rampa.disponibleEn(consulta);
+                }
+            } catch (Throwable e) {
+                fallo.set(e);
+            }
+        });
+        gestor.start();
+        visitante.start();
+        gestor.join();
+        visitante.join();
+
+        assertThat(fallo.get()).as("una consulta falló mientras se programaban cierres").isNull();
+        assertThat(rampa.cierres()).hasSize(20_001);
+        assertThat(rampa.disponibleEn(consulta)).isTrue();
+    }
+
     @Test
     @DisplayName("HU-10: un cierre con fin anterior o igual al inicio se rechaza")
     void finAnteriorAlInicioSeRechaza() {
