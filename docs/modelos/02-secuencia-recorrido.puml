@@ -1,0 +1,51 @@
+@startuml
+!pragma layout smetana
+skinparam backgroundColor white
+skinparam defaultFontName Segoe UI
+skinparam defaultFontSize 16
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam ArrowColor #48564F
+skinparam classBackgroundColor #F3F5EF
+skinparam classBorderColor #48564F
+skinparam noteBackgroundColor #FFF4DE
+skinparam noteBorderColor #A38247
+skinparam packageBackgroundColor #FFFFFF
+skinparam packageBorderColor #ABB2AB
+skinparam dpi 160
+hide circle
+title Pedir recorrido: resultado o ausencia de ruta
+autonumber
+actor Visitante
+participant "Página web" as Web
+participant RutasController as API
+participant PlanificadorRutas as Plan
+participant "IMapaRepository\n(MapaCampusEnMemoria)" as Mapa
+participant ManejadorErrores as Error
+Visitante -> Web : elige origen, destino y preferencia
+Web -> API : GET /api/recorridos
+API -> Plan : planificar(origen, destino, Preferencias)
+Plan -> Mapa : lugar(origen), lugar(destino)
+Mapa --> Plan : lugares existentes
+loop búsqueda del camino mínimo
+  Plan -> Mapa : tramos()
+  Mapa --> Plan : tramos del campus
+  Plan -> Plan : filtrar: disponible() y preferencias.admite()
+end
+alt existe recorrido compatible
+  Plan --> API : Recorrido
+  API --> Web : 200: lugares, tramos, metrosTotales, aviso
+  Web --> Visitante : mapa y pasos del recorrido
+else no hay recorrido compatible
+  Plan -> Plan : repetir búsqueda relajando restricciones\npara explicar el motivo
+  Plan --> API : SinRecorridoCompatibleException
+  API -> Error : Spring delega la excepción
+  Error --> Web : 422: mensaje y motivos
+  Web --> Visitante : explica ausencia de ruta; sin recorrido parcial
+end
+note over Web
+  Si origen = destino, la página muestra
+  «Ya estás en ...» sin llamar a la API.
+end note
+
+@enduml

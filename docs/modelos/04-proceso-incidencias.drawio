@@ -1,0 +1,138 @@
+<?xml version='1.0' encoding='utf-8'?>
+<mxfile host="app.diagrams.net">
+  <diagram name="Incidencias">
+    <mxGraphModel page="1" pageWidth="1900" pageHeight="970">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="PV" value="Visitante" style="swimlane;horizontal=0;startSize=65;fillColor=#edf1e8;" vertex="1" parent="1">
+          <mxGeometry x="35" y="115" width="1830" height="285" as="geometry" />
+        </mxCell>
+        <mxCell id="PG" value="Gestor de infraestructura" style="swimlane;horizontal=0;startSize=65;fillColor=#edf1e8;" vertex="1" parent="1">
+          <mxGeometry x="35" y="440" width="1830" height="420" as="geometry" />
+        </mxCell>
+        <mxCell id="inicioV" value="Inicio" style="rounded=1;whiteSpace=wrap;html=1;fontSize=20;fillColor=#e6eedb;shape=ellipse;" vertex="1" parent="1">
+          <mxGeometry x="160" y="205" width="40" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="reportar" value="Registrar reporte&lt;br&gt;(tramo y descripción)" style="rounded=1;whiteSpace=wrap;html=1;fontSize=20;fillColor=#e6eedb;" vertex="1" parent="1">
+          <mxGeometry x="300" y="175" width="250" height="95" as="geometry" />
+        </mxCell>
+        <mxCell id="errorDatos" value="Datos incompletos" style="rounded=1;whiteSpace=wrap;html=1;fontSize=20;fillColor=#e6eedb;shape=ellipse;" vertex="1" parent="1">
+          <mxGeometry x="500" y="252" width="36" height="36" as="geometry" />
+        </mxCell>
+        <mxCell id="corregir" value="Corregir datos" style="rounded=1;whiteSpace=wrap;html=1;fontSize=20;fillColor=#e6eedb;" vertex="1" parent="1">
+          <mxGeometry x="680" y="300" width="210" height="65" as="geometry" />
+        </mxCell>
+        <mxCell id="finV" value="Reporte registrado" style="rounded=1;whiteSpace=wrap;html=1;fontSize=20;fillColor=#e6eedb;shape=ellipse;strokeWidth=4;" vertex="1" parent="1">
+          <mxGeometry x="1030" y="205" width="40" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="inicioG" value="Reporte recibido" style="rounded=1;whiteSpace=wrap;html=1;fontSize=20;fillColor=#fff4de;shape=ellipse;" vertex="1" parent="1">
+          <mxGeometry x="180" y="555" width="40" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="revisar" value="Revisar barrera" style="rounded=1;whiteSpace=wrap;html=1;fontSize=20;fillColor=#fff4de;" vertex="1" parent="1">
+          <mxGeometry x="300" y="530" width="210" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="valida" value="¿Válida?" style="rounded=1;whiteSpace=wrap;html=1;fontSize=20;fillColor=#fff4de;shape=rhombus;" vertex="1" parent="1">
+          <mxGeometry x="590" y="545" width="60" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="validar" value="Validar incidencia&lt;br&gt;y cerrar tramo" style="rounded=1;whiteSpace=wrap;html=1;fontSize=20;fillColor=#fff4de;" vertex="1" parent="1">
+          <mxGeometry x="750" y="500" width="230" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="atender" value="Atender barrera" style="rounded=1;whiteSpace=wrap;html=1;fontSize=20;fillColor=#fff4de;" vertex="1" parent="1">
+          <mxGeometry x="1070" y="500" width="210" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="resolver" value="Marcar RESUELTA&lt;br&gt;evaluar reapertura" style="rounded=1;whiteSpace=wrap;html=1;fontSize=20;fillColor=#fff4de;" vertex="1" parent="1">
+          <mxGeometry x="1370" y="500" width="245" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="finG" value="Atendida" style="rounded=1;whiteSpace=wrap;html=1;fontSize=20;fillColor=#fff4de;shape=ellipse;strokeWidth=4;" vertex="1" parent="1">
+          <mxGeometry x="1740" y="525" width="40" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="rechazar" value="Marcar RECHAZADA&lt;br&gt;sin cambiar tramo" style="rounded=1;whiteSpace=wrap;html=1;fontSize=20;fillColor=#fff4de;" vertex="1" parent="1">
+          <mxGeometry x="750" y="710" width="245" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="finR" value="Descartada" style="rounded=1;whiteSpace=wrap;html=1;fontSize=20;fillColor=#fff4de;shape=ellipse;strokeWidth=4;" vertex="1" parent="1">
+          <mxGeometry x="1100" y="735" width="40" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="v1" source="inicioV" target="reportar" value="" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;html=1;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="v2" source="reportar" target="finV" value="" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;html=1;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="v3" source="errorDatos" target="corregir" value="" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;html=1;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="518" y="332" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="v4" source="corregir" target="reportar" value="Reintentar" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;html=1;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="785" y="380" />
+              <mxPoint x="260" y="380" />
+              <mxPoint x="260" y="245" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="g1" source="inicioG" target="revisar" value="" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;html=1;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="g2" source="revisar" target="valida" value="" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;html=1;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="g3" source="valida" target="validar" value="Sí" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;html=1;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="700" y="575" />
+              <mxPoint x="700" y="545" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="g4" source="valida" target="rechazar" value="No" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;html=1;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="620" y="755" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="g5" source="validar" target="atender" value="" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;html=1;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="g6" source="atender" target="resolver" value="" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;html=1;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="g7" source="resolver" target="finG" value="" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;html=1;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="g8" source="rechazar" target="finR" value="" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;html=1;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m1" source="reportar" target="inicioG" value="Reporte válido" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;html=1;dashed=1;endFill=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="425" y="420" />
+              <mxPoint x="200" y="420" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

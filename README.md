@@ -79,6 +79,8 @@ La evidencia del ciclo rojo–verde–refactor está en el historial de commits 
 
 La [matriz de trazabilidad](docs/matriz-trazabilidad.md) sigue 5 historias hasta su componente, su método y su prueba.
 
+Los modelos complementarios están en el [glosario](docs/glosario.md), los [diagramas UML y BPMN](docs/modelos/) y el [ADR de persistencia](docs/adr/0001-datos-en-memoria.md).
+
 **¿Cómo sabemos que el diagrama no quedó desactualizado?** Dos pruebas lo comprueban en cada build:
 
 | Prueba | Qué compara |
