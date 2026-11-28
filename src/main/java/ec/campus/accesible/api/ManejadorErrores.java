@@ -1,6 +1,8 @@
 package ec.campus.accesible.api;
 
+import ec.campus.accesible.dominio.IncidenciaNoEncontradaException;
 import ec.campus.accesible.dominio.LugarNoEncontradoException;
+import ec.campus.accesible.dominio.TransicionInvalidaException;
 import ec.campus.accesible.dominio.MotivoSinRecorrido;
 import ec.campus.accesible.dominio.SinRecorridoCompatibleException;
 import ec.campus.accesible.dominio.TramoNoEncontradoException;
@@ -29,9 +31,28 @@ public class ManejadorErrores {
         }
     }
 
-    @ExceptionHandler({LugarNoEncontradoException.class, TramoNoEncontradoException.class})
+    @ExceptionHandler({LugarNoEncontradoException.class, TramoNoEncontradoException.class,
+            IncidenciaNoEncontradaException.class})
     @ResponseStatus(HttpStatus.NOT_FOUND)
     Error noEncontrado(RuntimeException e) {
+        return new Error(e.getMessage());
+    }
+
+    @ExceptionHandler(org.springframework.web.servlet.resource.NoResourceFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    Error rutaInexistente() {
+        return new Error("La dirección pedida no existe");
+    }
+
+    @ExceptionHandler(AccesoDenegadoException.class)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    Error accesoDenegado(AccesoDenegadoException e) {
+        return new Error(e.getMessage());
+    }
+
+    @ExceptionHandler(TransicionInvalidaException.class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    Error transicionInvalida(TransicionInvalidaException e) {
         return new Error(e.getMessage());
     }
 

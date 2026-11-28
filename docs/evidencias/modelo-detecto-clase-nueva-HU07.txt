@@ -1,0 +1,5 @@
+[ERROR] Tests run: 2, Failures: 1, Errors: 0, Skipped: 0, Time elapsed: 2.051 s <<< FAILURE! -- in ec.campus.accesible.documentacion.ModeloSincronizadoTest
+[ERROR] ec.campus.accesible.documentacion.ModeloSincronizadoTest.codigoSinClasesSinDibujar -- Time elapsed: 1.703 s <<< FAILURE!
+[Hay clases nuevas que no están en workspace.dsl: actualiza el diagrama de componentes] 
+  ["AccesoDenegadoException"="api",
+  ["AccesoDenegadoException"="api"]

@@ -44,6 +44,8 @@ class ModeloSincronizadoTest {
                 .stream()
                 .filter(JavaClass::isTopLevelClass)
                 .filter(c -> !c.isInterface())
+                // Las excepciones no son componentes C4: son parte del contrato de error.
+                .filter(c -> !c.isAssignableTo(Throwable.class))
                 .forEach(c -> clases.put(c.getSimpleName(), c.getPackageName().substring(BASE.length())));
         return clases;
     }

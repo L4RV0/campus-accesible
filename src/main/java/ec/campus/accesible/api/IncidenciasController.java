@@ -3,8 +3,10 @@ package ec.campus.accesible.api;
 import ec.campus.accesible.aplicacion.IGestorIncidencias;
 import ec.campus.accesible.dominio.Incidencia;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
@@ -26,6 +28,22 @@ public class IncidenciasController {
     @ResponseStatus(HttpStatus.CREATED)
     public IncidenciaDto reportar(@RequestBody ReporteDto reporte) {
         return IncidenciaDto.de(gestor.reportar(reporte.tramoId(), reporte.descripcion()));
+    }
+
+    /** HU-07: el gestor confirma la barrera y el tramo deja de recomendarse. */
+    @PostMapping("/{id}/validacion")
+    public IncidenciaDto validar(@PathVariable String id,
+                                 @RequestHeader(value = "X-Rol", required = false) String rol) {
+        AccesoDenegadoException.exigirGestor(rol);
+        return IncidenciaDto.de(gestor.validar(id));
+    }
+
+    /** HU-07: el gestor descarta el reporte; el tramo no cambia. */
+    @PostMapping("/{id}/rechazo")
+    public IncidenciaDto rechazar(@PathVariable String id,
+                                  @RequestHeader(value = "X-Rol", required = false) String rol) {
+        AccesoDenegadoException.exigirGestor(rol);
+        return IncidenciaDto.de(gestor.rechazar(id));
     }
 
     public record ReporteDto(String tramoId, String descripcion) {
