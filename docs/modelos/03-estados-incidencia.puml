@@ -1,0 +1,43 @@
+@startuml
+!pragma layout smetana
+skinparam backgroundColor white
+skinparam defaultFontName Segoe UI
+skinparam defaultFontSize 16
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam ArrowColor #48564F
+skinparam classBackgroundColor #F3F5EF
+skinparam classBorderColor #48564F
+skinparam noteBackgroundColor #FFF4DE
+skinparam noteBorderColor #A38247
+skinparam packageBackgroundColor #FFFFFF
+skinparam packageBorderColor #ABB2AB
+skinparam dpi 160
+hide circle
+title Ciclo de una incidencia: objetivo de HU-06 a HU-09
+left to right direction
+state REPORTADA #E6EEDB
+state VALIDADA #FFF4DE
+state RECHAZADA #FFF4DE
+state RESUELTA #FFF4DE
+[*] --> REPORTADA : reportar [HU-06 en PR #15]
+REPORTADA --> VALIDADA : gestor valida / cerrar tramo [HU-07]
+REPORTADA --> RECHAZADA : gestor rechaza / sin cierre [HU-07]
+VALIDADA --> RESUELTA : gestor resuelve [HU-09]
+RECHAZADA --> [*]
+RESUELTA --> [*]
+note bottom of VALIDADA
+  Estado y fecha de revisión: HU-08.
+  Acciones del gestor: X-Rol: GESTOR.
+  Resolver reabre solo si no queda
+  otra incidencia validada ni cierre vigente.
+end note
+note bottom of REPORTADA
+  Verde: comportamiento de PR #15.
+  Ocre: transiciones pendientes.
+  El enum ya declara los 4 estados.
+  Se exige rechazar transiciones no dibujadas
+  al implementar HU-07 a HU-09.
+end note
+
+@enduml

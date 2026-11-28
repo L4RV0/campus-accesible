@@ -1,0 +1,89 @@
+@startuml
+!pragma layout smetana
+skinparam backgroundColor white
+skinparam defaultFontName Segoe UI
+skinparam defaultFontSize 16
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam ArrowColor #48564F
+skinparam classBackgroundColor #F3F5EF
+skinparam classBorderColor #48564F
+skinparam noteBackgroundColor #FFF4DE
+skinparam noteBorderColor #A38247
+skinparam packageBackgroundColor #FFFFFF
+skinparam packageBorderColor #ABB2AB
+skinparam dpi 160
+hide circle
+title Dominio de CampusAccesible (PR #16: 1e132ea)
+top to bottom direction
+class Lugar <<record>> {
+  id : String
+  nombre : String
+}
+class Tramo {
+  id : String
+  extremoA, extremoB : String
+  tipo : TipoTramo
+  metros : int
+  cerrado : boolean
+  disponible() : boolean
+  cerrar() / abrir()
+}
+class Preferencias <<record>> {
+  sinEscaleras : boolean
+  admite(tramo) : boolean
+}
+class Recorrido <<record>> {
+  lugares : List<Lugar>
+  tramos : List<Tramo>
+  metrosTotales() : int
+}
+class Incidencia <<HU-06>> {
+  id : String
+  tramoId : String
+  descripcion : String
+  estado : EstadoIncidencia
+  fechaReporte : LocalDateTime
+  fechaRevision : LocalDateTime [0..1]
+}
+enum TipoTramo {
+  PLANO
+  RAMPA
+  ESCALERA
+}
+enum EstadoIncidencia {
+  REPORTADA
+  VALIDADA
+  RECHAZADA
+  RESUELTA
+}
+Tramo --> TipoTramo : tipo
+Incidencia --> EstadoIncidencia : estado
+class CierreTemporal <<propuesto: HU-10>> #FFF4DE {
+  inicio : Instant
+  fin : Instant
+  vigenteEn(fecha) : boolean
+}
+Tramo "0..*" --> "1" Lugar : extremoA (por id)
+Tramo "0..*" --> "1" Lugar : extremoB (por id)
+Recorrido "0..*" --> "1..*" Lugar : lugares en orden
+Recorrido "0..*" --> "0..*" Tramo : tramos en orden
+Preferencias ..> Tramo : evalúa tipo
+Incidencia "0..*" --> "1" Tramo : tramoId
+CierreTemporal "0..*" ..> "1" Tramo : rampa [propuesto]
+note bottom of Recorrido
+  En resultados del planificador:
+  lugares = tramos + 1.
+  Origen = destino: 1 lugar y 0 tramos.
+end note
+note bottom of Incidencia
+  Clase Java, no record.
+  fechaRevision = null al reportar.
+  HU-06 solo crea en REPORTADA.
+  Validación, revisión y resolución
+  quedan pendientes de HU-07 a HU-09.
+end note
+
+note "Servicio de reporte: GestorIncidencias (IGestorIncidencias).\nPuerto: IIncidenciaRepository.\nAdaptador: IncidenciaRepositoryEnMemoria.\nSon componentes del C4; no entidades del dominio." as Componentes
+Componentes .. Incidencia
+@enduml
