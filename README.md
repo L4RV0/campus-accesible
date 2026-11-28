@@ -58,7 +58,7 @@ Invoke-RestMethod "http://localhost:8080/api/recorridos?origen=ENT&destino=AUD&s
 - **Versión y estado:** con la app en marcha, `http://localhost:8080/actuator/info` muestra la versión construida (`build.version`) y `http://localhost:8080/actuator/health` responde `UP`. No se exponen otros endpoints de administración.
 - **Logs:** salen por consola. Para guardarlos en un archivo:
   ```powershell
-  .mvnw.cmd spring-boot:run "-Dspring-boot.run.arguments=--logging.file.name=logs/campus.log"
+  .\mvnw.cmd spring-boot:run "-Dspring-boot.run.arguments=--logging.file.name=logs/campus.log"
   ```
 - **Versiones publicadas:** cada etiqueta `vX.Y.Z` ejecuta `.github/workflows/release.yml`, que corre las pruebas y publica el `.jar` en la pestaña **Releases**.
 - **Volver a una versión estable (rollback):** descargar el `.jar` de la versión anterior desde Releases y ejecutarlo con `java -jar campus-accesible-X.Y.Z.jar`. En el código, `git revert <commit>` deshace un cambio sin reescribir el historial, y el CI vuelve a probarlo.
