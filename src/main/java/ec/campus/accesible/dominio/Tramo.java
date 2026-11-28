@@ -1,5 +1,9 @@
 package ec.campus.accesible.dominio;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Conexión entre dos lugares. Se puede recorrer en ambos sentidos.
  * Un tramo cerrado sigue existiendo en el mapa, pero no debe recomendarse.
@@ -12,6 +16,7 @@ public class Tramo {
     private final TipoTramo tipo;
     private final int metros;
     private boolean cerrado;
+    private final List<CierreTemporal> cierres = new ArrayList<>();
 
     public Tramo(String id, String extremoA, String extremoB, TipoTramo tipo, int metros) {
         if (metros <= 0) {
@@ -41,6 +46,19 @@ public class Tramo {
     /** Regla 2: un tramo cerrado no se recomienda. */
     public boolean disponible() {
         return !cerrado;
+    }
+
+    /** HU-10: disponible en un momento dado (pendiente de implementar). */
+    public boolean disponibleEn(LocalDateTime momento) {
+        return disponible();
+    }
+
+    public void agregarCierre(CierreTemporal cierre) {
+        cierres.add(cierre);
+    }
+
+    public List<CierreTemporal> cierres() {
+        return List.copyOf(cierres);
     }
 
     public void cerrar() {
