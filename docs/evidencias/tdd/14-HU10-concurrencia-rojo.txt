@@ -1,0 +1,6 @@
+[ERROR] Tests run: 5, Failures: 1, Errors: 0, Skipped: 0, Time elapsed: 0.337 s <<< FAILURE! -- in ec.campus.accesible.aplicacion.CierreTemporalTest
+[ERROR] ec.campus.accesible.aplicacion.CierreTemporalTest.cierresConcurrentesConConsultas -- Time elapsed: 0.031 s <<< FAILURE!
+expected: 
+  java.util.ConcurrentModificationException
+[ERROR]   CierreTemporalTest.cierresConcurrentesConConsultas:107 [una consulta falló mientras se programaban cierres] 
+expected: 

@@ -1,5 +1,9 @@
 package ec.campus.accesible.dominio;
 
+import java.time.LocalDateTime;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.List;
+
 /**
  * Conexión entre dos lugares. Se puede recorrer en ambos sentidos.
  * Un tramo cerrado sigue existiendo en el mapa, pero no debe recomendarse.
@@ -12,6 +16,11 @@ public class Tramo {
     private final TipoTramo tipo;
     private final int metros;
     private boolean cerrado;
+    /**
+     * Lista segura entre hilos: el gestor puede programar un cierre mientras otros consultan rutas
+     * (revisión de Erick en el PR #19). Se leen muchas más veces de las que se escriben.
+     */
+    private final List<CierreTemporal> cierres = new CopyOnWriteArrayList<>();
 
     public Tramo(String id, String extremoA, String extremoB, TipoTramo tipo, int metros) {
         if (metros <= 0) {
@@ -41,6 +50,19 @@ public class Tramo {
     /** Regla 2: un tramo cerrado no se recomienda. */
     public boolean disponible() {
         return !cerrado;
+    }
+
+    /** Reglas 2 y HU-10: no se recomienda si está cerrado o si tiene un cierre temporal vigente. */
+    public boolean disponibleEn(LocalDateTime momento) {
+        return disponible() && cierres.stream().noneMatch(c -> c.vigenteEn(momento));
+    }
+
+    public void agregarCierre(CierreTemporal cierre) {
+        cierres.add(cierre);
+    }
+
+    public List<CierreTemporal> cierres() {
+        return List.copyOf(cierres);
     }
 
     public void cerrar() {

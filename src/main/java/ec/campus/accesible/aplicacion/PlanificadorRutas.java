@@ -8,6 +8,8 @@ import ec.campus.accesible.dominio.Recorrido;
 import ec.campus.accesible.dominio.SinRecorridoCompatibleException;
 import ec.campus.accesible.dominio.Tramo;
 
+import java.time.Clock;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -25,18 +27,26 @@ import java.util.function.Predicate;
 public class PlanificadorRutas implements IPlanificadorRutas {
 
     private final IMapaRepository mapa;
+    private final Clock reloj;
 
     public PlanificadorRutas(IMapaRepository mapa) {
+        this(mapa, Clock.systemDefaultZone());
+    }
+
+    /** HU-10: el reloj dice en qué momento se consulta, para saber qué cierres temporales están vigentes. */
+    public PlanificadorRutas(IMapaRepository mapa, Clock reloj) {
         this.mapa = mapa;
+        this.reloj = reloj;
     }
 
     @Override
     public Recorrido planificar(String origenId, String destinoId, Preferencias preferencias) {
         Lugar origen = buscarLugar(origenId);
         Lugar destino = buscarLugar(destinoId);
+        LocalDateTime ahora = LocalDateTime.now(reloj);
 
         Predicate<Tramo> respetaPreferencias = preferencias::admite;
-        Predicate<Tramo> abierto = Tramo::disponible;
+        Predicate<Tramo> abierto = tramo -> tramo.disponibleEn(ahora);
 
         return buscar(origen, destino, respetaPreferencias.and(abierto))
                 .orElseThrow(() -> sinRecorrido(origen, destino, respetaPreferencias, abierto));

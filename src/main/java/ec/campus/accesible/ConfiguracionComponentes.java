@@ -1,6 +1,8 @@
 package ec.campus.accesible;
 
+import ec.campus.accesible.aplicacion.GestorCierres;
 import ec.campus.accesible.aplicacion.GestorIncidencias;
+import ec.campus.accesible.aplicacion.IGestorCierres;
 import ec.campus.accesible.aplicacion.IGestorIncidencias;
 import ec.campus.accesible.aplicacion.IIncidenciaRepository;
 import ec.campus.accesible.aplicacion.IMapaRepository;
@@ -37,12 +39,17 @@ public class ConfiguracionComponentes {
     }
 
     @Bean
-    IPlanificadorRutas planificadorRutas(IMapaRepository mapa) {
-        return new PlanificadorRutas(mapa);
+    IPlanificadorRutas planificadorRutas(IMapaRepository mapa, Clock reloj) {
+        return new PlanificadorRutas(mapa, reloj);
     }
 
     @Bean
     IGestorIncidencias gestorIncidencias(IMapaRepository mapa, IIncidenciaRepository incidencias, Clock reloj) {
         return new GestorIncidencias(mapa, incidencias, reloj);
+    }
+
+    @Bean
+    IGestorCierres gestorCierres(IMapaRepository mapa) {
+        return new GestorCierres(mapa);
     }
 }
