@@ -1,7 +1,7 @@
 /*
  * Modelo C4 de CampusAccesible, escrito como código (Structurizr DSL).
  *
- * Versión visual y editable: https://www.figma.com/board/5324U5ZJn1I39AflSS6G6p
+ * Versión visual y editable: https://www.figma.com/board/j1YjFZgZReLn1tF3yNutlg
  * Este archivo es la fuente que comprueban las pruebas. También se abre con Structurizr Lite.
  *
  * Regla del equipo: cada «component» de este archivo es una clase real del paquete
