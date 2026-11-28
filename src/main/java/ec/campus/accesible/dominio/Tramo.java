@@ -48,9 +48,9 @@ public class Tramo {
         return !cerrado;
     }
 
-    /** HU-10: disponible en un momento dado (pendiente de implementar). */
+    /** Reglas 2 y HU-10: no se recomienda si está cerrado o si tiene un cierre temporal vigente. */
     public boolean disponibleEn(LocalDateTime momento) {
-        return disponible();
+        return disponible() && cierres.stream().noneMatch(c -> c.vigenteEn(momento));
     }
 
     public void agregarCierre(CierreTemporal cierre) {
